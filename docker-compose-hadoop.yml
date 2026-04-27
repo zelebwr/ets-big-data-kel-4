@@ -1,3 +1,4 @@
+# [HDFS/YARN service orchestration]
 services:
   namenode:
     image: apache/hadoop:3
@@ -5,8 +6,8 @@ services:
     hostname: namenode
     container_name: hadoop-namenode
     ports:
-      - "9870:9870"   # NameNode Web UI
-      - "8020:8020"   # NameNode RPC
+      - "9870:9870"
+      - "8020:8020"
     environment:
       ENSURE_NAMENODE_DIR: /tmp/hadoop-hadoop/dfs/name
     env_file:
@@ -34,7 +35,7 @@ services:
       datanode:
         condition: service_started
     ports:
-      - "8088:8088"   # ResourceManager Web UI
+      - "8088:8088"
     env_file:
       - ./hadoop.env
     command: ["yarn", "resourcemanager"]
@@ -48,7 +49,7 @@ services:
       resourcemanager:
         condition: service_started
     ports:
-      - "8042:8042"   # NodeManager Web UI
+      - "8042:8042"
     env_file:
       - ./hadoop.env
     command: ["yarn", "nodemanager"]
