@@ -78,3 +78,41 @@ docker exec -it hadoop-namenode hdfs dfs -ls -R /data/weather
 docker exec -it hadoop-namenode hdfs dfsadmin -report
 ```
 
+---
+
+## B. Kafka Producer API
+
+### 1. Test Weather API
+
+Command: 
+
+```bash
+docker exec -it kafka-broker kafka-console-consumer --topic weather-api --from-beginning --bootstrap-server localhos
+t:9092
+```
+
+### 2. Check Consumer Group 
+
+Command:
+
+```bash
+docker exec -it kafka-broker kafka-consumer-groups --bootstrap-server localhost:9092 --list
+```
+
+### 3. Check Offset Detail + Lag Topic Weahter API
+
+Command: 
+
+```bash
+docker exec -it kafka-broker kafka-consumer-groups --bootstrap-server localhost:9092 --descibe --group console-consumer-15478
+```
+
+### 4. Check `live_api.json`
+
+Command:
+
+```bash
+cat dashboard/data/live_api.json
+```
+
+
