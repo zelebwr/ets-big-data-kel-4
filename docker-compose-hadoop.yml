@@ -12,7 +12,16 @@ services:
       ENSURE_NAMENODE_DIR: /tmp/hadoop-hadoop/dfs/name
     env_file:
       - ./hadoop.env
-    command: ["hdfs", "namenode"]
+    volumes:
+      - hadoop-namenode:/tmp/hadoop-hadoop/dfs/name
+    user: "root"
+    command: >
+      /bin/bash -c "
+        if [ ! -f /tmp/hadoop-hadoop/dfs/name/current/VERSION ]; then
+          hdfs namenode -format -nonInteractive;
+        fi &&
+        hdfs namenode
+      "
 
   datanode:
     image: apache/hadoop:3
@@ -24,7 +33,15 @@ services:
         condition: service_started
     env_file:
       - ./hadoop.env
-    command: ["hdfs", "datanode"]
+    volumes:
+      - hadoop-datanode:/tmp/hadoop-hadoop/dfs/data
+    user: "root"
+    command: >
+      /bin/bash -c "
+        mkdir -p /tmp/hadoop-hadoop/dfs/data &&
+        chown -R hadoop:hadoop /tmp/hadoop-hadoop/dfs/data &&
+        su hadoop -c 'hdfs datanode'
+      "
 
   resourcemanager:
     image: apache/hadoop:3
@@ -53,3 +70,7 @@ services:
     env_file:
       - ./hadoop.env
     command: ["yarn", "nodemanager"]
+
+volumes:
+  hadoop-namenode:
+  hadoop-datanode:

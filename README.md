@@ -31,14 +31,17 @@ Command:
 
 ```bash
 docker compose -f docker-compose-kafka.yml up -d
+docker compose -f docker-compose-kafka.yml ps
 ```
 
-### 3. Verify Kafka Broker Activeness + Make 2 Topic
+### 3. Make 2 Topic
 
 Command:
 
 ```bash
-docker commpose -f docker-compose-kafka.yml ps
+docker exec -it kafka-broker kafka-topics --create --topic news-api --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+docker exec -it kafka-broker kafka-topics --create --topic news-rss --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+docker exec -it kafka-broker kafka-topics --list --boostrap-server localhost:9092
 ```
 
 ### 4. Setup Hadoop via Dokcer Compose
@@ -46,23 +49,16 @@ docker commpose -f docker-compose-kafka.yml ps
 ```bash
 docker rm -f hadoop-resourcemanager -f hadoop-nodemanager -f hadoop-datanode -f haddop-namenode
 docker compose -f docker-compose-hadoop.yml up -d
+docker compose -f docker-compose-hadoop.yml ps
 ```
 
-### 5. Verify 4 Hadoop Container Activeness
+### 5. Make Directory Structure on HDFS
 
 Command:
 
 ```bash
-docker compose -f docker-compose-hadoop.yml up -d
-```
-
-### 6. Make Directory Structure on HDFS
-
-Command:
-
-```bash
-docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/weather/{api,rss,hasil}
-docker exec -it hadoop-namenode hdfs dfs -ls -R /data/weather/
+docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/{api,rss,hasil}
+docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news/
 ```
 
 ### 7. Verify HDFS Web UI
@@ -74,7 +70,7 @@ Command:
 ```bash
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 docker exec -it kafka-broker kafka-topics --list --bootstrap-server localhost:9092
-docker exec -it hadoop-namenode hdfs dfs -ls -R /data/weather
+docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news
 docker exec -it hadoop-namenode hdfs dfsadmin -report
 ```
 
@@ -87,7 +83,7 @@ docker exec -it hadoop-namenode hdfs dfsadmin -report
 Command: 
 
 ```bash
-docker exec -it kafka-broker kafka-console-consumer --topic weather-api --from-beginning --bootstrap-server localhos
+docker exec -it kafka-broker kafka-console-consumer --topic news-api --from-beginning --bootstrap-server localhos
 t:9092
 ```
 
