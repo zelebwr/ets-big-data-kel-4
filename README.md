@@ -111,4 +111,65 @@ Command:
 cat dashboard/data/live_api.json
 ```
 
+## C. Weather Data Producer (API) = Anggota 2
 
+### 1. Install Dependency
+```bash
+cat python -m pip install kafka-python requests
+```
+
+### 2. Implementation (Running the Script)
+Script kafka/producer_api.py akan menarik data suhu, kelembapan, dan kecepatan angin untuk kota JKT, SBY, SMG, MDN, MKS, DPS setiap 10 menit.
+```bash
+cat python kafka/producer_api.py
+```
+
+### 3. Verification (Checking Data Flow)
+Untuk memastikan data benar-benar sampai ke Kafka Broker, buka terminal baru dan jalankan perintah konsumer internal Kafka:
+```bash
+cat docker exec -it kafka-broker kafka-console-consumer --topic weather-api --from-beginning --property print.key=true --bootstrap-server localhost:9092
+```
+Hasil yang diharapkan:
+Terminal akan menampilkan Key (Kode Kota) diikuti oleh JSON data cuaca seperti ini:
+JKT {"kode_kota": "JKT", "temperature": 24.5, ...}
+
+## 4. Data Ingestion (RSS) & HDFS Storage = Anngota 3
+
+### 1. Install Dependency
+Pastikan pustaka untuk parsing RSS dan koneksi Kafka sudah terpasang.
+```bash
+cat python -m pip install kafka-python feedparser
+```
+### 2. HDFS Infrastructure Setup (Manual)
+Sebelum menjalankan consumer, folder tujuan di HDFS harus dibuat secara manual agar tidak terjadi error "Directory not found".
+```bash
+cat # Membuat folder induk dan sub-folder data
+docker exec hadoop-namenode hdfs dfs -mkdir -p /data/weather/api
+docker exec hadoop-namenode hdfs dfs -mkdir -p /data/weather/rss
+docker exec hadoop-namenode hdfs dfs -mkdir -p /data/weather/hasil
+```
+
+### 3. Implementation (Running the Scripts)
+- **Running Producer RSS**
+Script ini mengambil berita cuaca terbaru dari portal berita setiap 5 menit.
+```bash
+cat # Jalankan di Terminal 1
+python kafka/producer_rss.py
+```
+Catatan: Jika muncul "0 artikel baru", berarti belum ada berita cuaca terbaru yang dirilis oleh portal berita pada saat script dijalankan.
+
+- **Running Consumer to HDFS**
+Script ini bertugas menyedot data dari topik Kafka (weather-api dan weather-rss) lalu menyimpannya ke Hadoop.
+```bash
+cat # Jalankan di Terminal 2
+python kafka/consumer_to_hdfs.py
+```
+
+### Verification (Checking HDFS Data)
+Untuk memastikan data telah tersimpan secara permanen di Hadoop, jalankan perintah berikut:
+```bash
+cat # Melihat daftar file yang masuk ke HDFS secara rekursif
+docker exec hadoop-namenode hdfs dfs -ls -R /data/weather/
+```
+Hasil yang diharapkan:
+Muncul daftar file .json di dalam folder /data/weather/api/ (dan /rss/ jika berita sudah tersedia).
