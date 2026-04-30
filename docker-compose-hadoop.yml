@@ -1,4 +1,3 @@
-# [HDFS/YARN service orchestration]
 services:
   namenode:
     image: apache/hadoop:3
