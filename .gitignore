@@ -1,4 +1,5 @@
 *.env
+!hadoop.env
 dashboard/data/
 __pycache__/
 *.pyc
