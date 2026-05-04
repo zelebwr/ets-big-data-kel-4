@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NewsPulse - Dashboard monitoring tren berita nasional Indonesia">
+    <title>NewsPulse - Analisis Tren Berita Nasional</title>
+    <script>
+        (() => {
+            const storedTheme = localStorage.getItem('newspulse-theme');
+            const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.dataset.theme = storedTheme || preferredTheme;
+        })();
+    </script>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="ambient-rails" aria-hidden="true">
+        <div class="ambient-rail rail-left">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="ambient-rail rail-right">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <header class="header finisher-header" id="main-header">
+        <div class="header-content">
+            <a class="logo-section" href="#dashboard-main" aria-label="NewsPulse dashboard">
+                <span class="logo-shell">
+                    <img src="/static/logo-news-pulse.png" alt="NewsPulse" class="logo-image">
+                </span>
+                <span class="brand-live"><span class="brand-dot"></span>Live Monitoring</span>
+            </a>
+            <h1 class="sr-only">NewsPulse - Analisis Tren Berita Nasional</h1>
+            <nav class="header-nav">
+                <a href="#panel-map" class="active">Peta</a>
+                <a href="#panel-kata-trending">Analisis</a>
+                <a href="#panel-feed-berita">Berita</a>
+            </nav>
+            <div class="header-right">
+                <div class="header-stats">
+                    <div class="stat-badge"><span class="stat-dot api"></span><span>API: <strong id="count-api">0</strong></span></div>
+                    <div class="stat-badge"><span class="stat-dot rss"></span><span>RSS: <strong id="count-rss">0</strong></span></div>
+                </div>
+                <div class="header-time" id="header-clock">--:--:--</div>
+                <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Ganti mode gelap dan terang" aria-pressed="false" title="Ganti tema">
+                    <span class="theme-toggle-knob" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard" id="dashboard-main">
+        <!-- Top Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card anim-slide-up" style="--delay:0"><div class="stat-card-label">Total Berita</div><div class="stat-card-value" id="total-berita">0</div><div class="stat-card-sub" id="change-berita">artikel terkumpul</div></div>
+            <div class="stat-card anim-slide-up" style="--delay:1"><div class="stat-card-label">Sumber Aktif</div><div class="stat-card-value" id="total-sumber">3</div><div class="stat-card-sub">media</div></div>
+            <div class="stat-card anim-slide-up" style="--delay:2"><div class="stat-card-label">Kata Terpopuler</div><div class="stat-card-value word-val" id="top-kata">-</div><div class="stat-card-sub" id="top-kata-freq">0x muncul</div></div>
+            <div class="stat-card anim-slide-up" style="--delay:3"><div class="stat-card-label">Jam Tersibuk</div><div class="stat-card-value" id="jam-tersibuk">-</div><div class="stat-card-sub">WIB</div></div>
+            <div class="stat-card anim-slide-up" style="--delay:4"><div class="stat-card-label">Sumber Terbanyak</div><div class="stat-card-value word-val" id="sumber-terbanyak">-</div><div class="stat-card-sub" id="sumber-terbanyak-count">0 artikel</div></div>
+            <div class="stat-card anim-slide-up" style="--delay:5"><div class="stat-card-label">Auto Refresh</div><div class="stat-card-value" id="refresh-timer">30</div><div class="stat-card-sub">detik</div></div>
+        </div>
+
+        <!-- MAP: CENTER OF ATTENTION -->
+        <section class="map-section anim-fade-in" id="panel-map">
+            <div class="video-container" style="margin-bottom: 20px; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                <video src="/static/breaking-news.mp4" autoplay loop muted playsinline style="width: 100%; height: auto; display: block;"></video>
+            </div>
+            <div class="map-header">
+                <div>
+                    <h2 class="map-title">Distribusi Berita per Wilayah Indonesia</h2>
+                    <p class="map-subtitle">Hover provinsi untuk melihat detail berita</p>
+                </div>
+                <div class="map-legend">
+                    <div class="legend-item"><span class="legend-dot kompas"></span>Kompas</div>
+                    <div class="legend-item"><span class="legend-dot tempo"></span>Tempo</div>
+                    <div class="legend-item"><span class="legend-dot gnews"></span>GNews</div>
+                </div>
+            </div>
+            <div id="map-container"></div>
+            <div class="map-tooltip" id="map-tooltip">
+                <h4 id="tooltip-title">-</h4>
+                <div class="map-tooltip-row"><span>Jumlah Berita</span><strong id="tooltip-count">0</strong></div>
+                <div class="map-tooltip-row"><span>Topik Populer</span><strong id="tooltip-kata">-</strong></div>
+            </div>
+        </section>
+
+        <!-- Mid Row: Charts Side by Side -->
+        <div class="charts-row">
+            <section class="card anim-slide-up" style="--delay:1" id="panel-distribusi-sumber">
+                <div class="card-header"><h2>Distribusi per Sumber</h2><span class="badge">Analisis 2</span></div>
+                <div class="card-body chart-container"><canvas id="chart-sumber"></canvas></div>
+            </section>
+            <section class="card anim-slide-up" style="--delay:2" id="panel-volume-jam">
+                <div class="card-header"><h2>Volume Publikasi per Jam</h2><span class="badge">Analisis 3</span></div>
+                <div class="card-body chart-container"><canvas id="chart-jam"></canvas></div>
+            </section>
+        </div>
+
+        <!-- Bottom Row: Trending + Chart -->
+        <div class="charts-row">
+            <section class="card anim-slide-up" style="--delay:3" id="panel-kata-trending">
+                <div class="card-header"><h2>Kata Trending Top 15</h2><span class="badge">Analisis 1</span></div>
+                <div class="card-body"><table id="table-trending"><thead><tr><th>#</th><th>Kata</th><th>Frekuensi</th><th>Bar</th></tr></thead><tbody id="trending-body"><tr><td colspan="4" class="loading">Memuat data...</td></tr></tbody></table></div>
+            </section>
+            <section class="card anim-slide-up" style="--delay:4" id="panel-kata-chart">
+                <div class="card-header"><h2>Visualisasi Kata Trending</h2><span class="badge bonus">Bonus Chart.js</span></div>
+                <div class="card-body chart-container" style="height:320px"><canvas id="chart-kata"></canvas></div>
+            </section>
+        </div>
+
+        <!-- News Feed: Trending + Terbaru -->
+        <section class="card card-full anim-slide-up" style="--delay:5" id="panel-feed-berita">
+            <div class="card-header">
+                <div class="feed-tabs">
+                    <button class="feed-tab active" data-tab="trending" id="tab-trending">Berita Trending</button>
+                    <button class="feed-tab" data-tab="terbaru" id="tab-terbaru">Berita Terbaru</button>
+                </div>
+                <span class="badge live">LIVE</span>
+            </div>
+            <div class="card-body">
+                <div id="news-feed-trending" class="news-grid"><div class="loading">Memuat berita trending...</div></div>
+                <div id="news-feed-terbaru" class="news-grid" style="display:none"><div class="loading">Memuat berita terbaru...</div></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="footer">
+        <p>NewsPulse -- ETS Big Data Kelompok 4 | Auto-refresh setiap 30 detik</p>
+    </footer>
+
+    <script src="/static/finisher-header.es5.min.js"></script>
+    <script>
+        let chartSumber=null,chartJam=null,chartKata=null,refreshCountdown=30,latestData=null,headerAnimation=null;
+        const COLORS={bars:['#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#0d9488','#ea580c','#d97706'],borders:['#1e40af','#2563eb','#3b82f6','#60a5fa','#93c5fd','#0f766e','#c2410c','#b45309']};
+        const HEADER_THEMES={
+            light:{background:'#f8fbff',backgroundAlt:'#ffffff',backgroundEnd:'#ecfdf5',particles:['#2563eb','#0d9488','#60a5fa','#1e40af','#ea580c'],blending:'source-over'},
+            dark:{background:'#0f172a',backgroundAlt:'#111827',backgroundEnd:'#082f49',particles:['#38bdf8','#2dd4bf','#60a5fa','#f97316','#93c5fd'],blending:'screen'}
+        };
+
+        function cssVar(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim();}
+        function getChartTheme(){return{color:cssVar('--text-medium')||'#64748b',grid:cssVar('--chart-grid')||'#f1f5f9',surface:cssVar('--bg-card')||'#ffffff'};}
+        function applyChartDefaults(){const t=getChartTheme();Chart.defaults.color=t.color;Chart.defaults.font.family='Inter, sans-serif';Chart.defaults.plugins.legend.display=false;}
+        applyChartDefaults();
+
+        function currentTheme(){return document.documentElement.dataset.theme==='dark'?'dark':'light';}
+        function initHeaderAnimation(){
+            if(headerAnimation){headerAnimation.destroy();}
+            const theme=HEADER_THEMES[currentTheme()];
+            headerAnimation=new FinisherHeader({
+                target:'#main-header',
+                count:14,
+                size:{min:4,max:28,pulse:0.2},
+                speed:{x:{min:0.15,max:1.25},y:{min:0.02,max:0.18}},
+                colors:theme,
+                blending:theme.blending,
+                opacity:{center:0.9,edge:0.45},
+                skew:-1,
+                shapes:['s']
+            });
+        }
+        function syncThemeToggle(){
+            const toggle=document.getElementById('theme-toggle');
+            if(!toggle)return;
+            const isDark=currentTheme()==='dark';
+            toggle.setAttribute('aria-pressed',String(isDark));
+            toggle.title=isDark?'Ganti ke mode terang':'Ganti ke mode gelap';
+        }
+        function setTheme(theme){
+            document.documentElement.dataset.theme=theme;
+            localStorage.setItem('newspulse-theme',theme);
+            syncThemeToggle();
+            initHeaderAnimation();
+            window.dispatchEvent(new CustomEvent('newspulse:themechange',{detail:{theme}}));
+        }
+        document.getElementById('theme-toggle').addEventListener('click',()=>setTheme(currentTheme()==='dark'?'light':'dark'));
+        syncThemeToggle();
+        initHeaderAnimation();
+
+        // Clock
+        setInterval(()=>{document.getElementById('header-clock').textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'})},1000);
+
+        // Load real Indonesia SVG map
+        async function loadMap(){
+            try{
+                const resp=await fetch('/static/indonesia.svg');
+                const svgText=await resp.text();
+                const container=document.getElementById('map-container');
+                container.innerHTML=svgText;
+                const svg=container.querySelector('svg');
+                if(svg){
+                    // Ensure viewBox is set for proper scaling
+                    if(!svg.getAttribute('viewBox')){
+                        svg.setAttribute('viewBox','0 0 792.54596 316.66394');
+                    }
+                    svg.setAttribute('width','100%');
+                    svg.removeAttribute('height');
+                    svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+                    // Style all paths as provinces
+                    svg.querySelectorAll('path').forEach(p=>{
+                        // Skip non-Indonesia (MY-12, MY-13, BN, TL)
+                        const id=p.getAttribute('id')||'';
+                        if(id.startsWith('MY-')||id==='BN'||id==='TL'){
+                            p.style.fill=cssVar('--bg-muted')||'#f1f5f9';p.style.stroke=cssVar('--border-light')||'#e2e8f0';p.style.strokeWidth='0.5';
+                            p.style.pointerEvents='none';return;
+                        }
+                        p.classList.add('province');
+                        p.dataset.name=p.getAttribute('title')||id;
+                        p.dataset.count='0';p.dataset.kata='-';
+                    });
+                    // Tooltip
+                    const tooltip=document.getElementById('map-tooltip');
+                    svg.querySelectorAll('.province').forEach(el=>{
+                        el.addEventListener('mouseenter',()=>{
+                            document.getElementById('tooltip-title').textContent=el.dataset.name;
+                            document.getElementById('tooltip-count').textContent=el.dataset.count;
+                            document.getElementById('tooltip-kata').textContent=el.dataset.kata;
+                            tooltip.style.display='block';el.classList.add('hovered');
+                        });
+                        el.addEventListener('mousemove',e=>{
+                            const rect=el.closest('.map-section').getBoundingClientRect();
+                            tooltip.style.left=(e.clientX-rect.left+12)+'px';
+                            tooltip.style.top=(e.clientY-rect.top-50)+'px';
+                        });
+                        el.addEventListener('mouseleave',()=>{tooltip.style.display='none';el.classList.remove('hovered');});
+                    });
+                }
+            }catch(e){console.error('Map load error:',e);}
+        }
+
+        function updateMapData(news){
+            const regionKeywords={
+                'ID-AC':['aceh','banda aceh'],'ID-SU':['medan','sumatera utara','sumut'],
+                'ID-SB':['padang','sumatera barat','sumbar'],'ID-RI':['pekanbaru','riau'],
+                'ID-JA':['jambi'],'ID-SS':['palembang','sumatera selatan','sumsel'],
+                'ID-BE':['bengkulu'],'ID-LA':['lampung','bandar lampung'],
+                'ID-BB':['bangka','belitung'],'ID-KR':['kepulauan riau','batam','tanjungpinang'],
+                'ID-JK':['jakarta','dki','ibu kota','monas','istana negara'],
+                'ID-BT':['banten','tangerang','serang','cilegon'],
+                'ID-JB':['bandung','jawa barat','jabar','bogor','bekasi','depok','karawang'],
+                'ID-JT':['semarang','jawa tengah','jateng','solo','surakarta'],
+                'ID-YO':['yogyakarta','jogja','diy'],
+                'ID-JI':['surabaya','jawa timur','jatim','malang','sidoarjo','gresik'],
+                'ID-BA':['bali','denpasar','kuta'],
+                'ID-NB':['lombok','mataram','ntb','nusa tenggara barat'],
+                'ID-NT':['kupang','ntt','nusa tenggara timur','flores'],
+                'ID-KB':['pontianak','kalimantan barat','kalbar'],
+                'ID-KT':['palangkaraya','kalimantan tengah','kalteng'],
+                'ID-KS':['banjarmasin','kalimantan selatan','kalsel'],
+                'ID-KI':['samarinda','balikpapan','kalimantan timur','kaltim','ikn','nusantara'],
+                'ID-KU':['tarakan','kalimantan utara','kaltara'],
+                'ID-SA':['manado','sulawesi utara','sulut'],
+                'ID-GO':['gorontalo'],
+                'ID-ST':['palu','sulawesi tengah','sulteng'],
+                'ID-SN':['makassar','sulawesi selatan','sulsel'],
+                'ID-SG':['kendari','sulawesi tenggara','sultra'],
+                'ID-SR':['mamuju','sulawesi barat','sulbar'],
+                'ID-MA':['ambon','maluku'],
+                'ID-MU':['ternate','maluku utara','malut'],
+                'ID-PA':['jayapura','papua','merauke'],
+                'ID-PB':['manokwari','papua barat'],
+            };
+            const provCounts={},provKata={};
+            news.forEach(n=>{
+                const text=((n.judul||'')+ ' '+(n.deskripsi||'')).toLowerCase();
+                let matched=false;
+                for(const[prov,keywords]of Object.entries(regionKeywords)){
+                    for(const kw of keywords){
+                        if(text.includes(kw)){
+                            provCounts[prov]=(provCounts[prov]||0)+1;
+                            if(!provKata[prov])provKata[prov]=kw;
+                            matched=true;break;
+                        }
+                    }
+                    if(matched)break;
+                }
+                // Default nasional to Jakarta
+                if(!matched){provCounts['ID-JK']=(provCounts['ID-JK']||0)+1;if(!provKata['ID-JK'])provKata['ID-JK']='nasional';}
+            });
+            const maxCount=Math.max(...Object.values(provCounts),1);
+            document.querySelectorAll('.province').forEach(el=>{
+                const id=el.getAttribute('id')||'';
+                const count=provCounts[id]||0;
+                el.dataset.count=count;
+                el.dataset.kata=provKata[id]||'-';
+                el.classList.remove('hot','hottest');
+                if(count>0&&count>=maxCount*0.7)el.classList.add('hottest');
+                else if(count>0)el.classList.add('hot');
+            });
+        }
+
+        async function fetchData(){try{const r=await fetch('/api/data');renderAll(await r.json());}catch(e){console.error('Fetch error:',e);}}
+
+        function renderAll(data){
+            latestData=data;
+            applyChartDefaults();
+            const spark=data.spark||{},totalApi=data.total_api||0,totalRss=data.total_rss||0;
+            document.getElementById('count-api').textContent=totalApi;
+            document.getElementById('count-rss').textContent=totalRss;
+            animateNumber('total-berita',totalApi+totalRss);
+            document.getElementById('change-berita').textContent=(totalApi+totalRss)+' artikel terkumpul';
+            const kata=spark.kata_trending||[];
+            if(kata.length>0){document.getElementById('top-kata').textContent=kata[0].kata;document.getElementById('top-kata-freq').textContent=(kata[0].frekuensi||0)+'x muncul';}
+            const sumber=spark.distribusi_sumber||[];
+            if(sumber.length>0){const top=sumber.reduce((a,b)=>(a.jumlah||0)>(b.jumlah||0)?a:b);document.getElementById('sumber-terbanyak').textContent=top.sumber;document.getElementById('sumber-terbanyak-count').textContent=(top.jumlah||0)+' artikel';document.getElementById('total-sumber').textContent=sumber.length;}
+            const jam=spark.volume_per_jam||[];
+            if(jam.length>0){const topJ=jam.reduce((a,b)=>(a.jumlah_berita||0)>(b.jumlah_berita||0)?a:b);document.getElementById('jam-tersibuk').textContent=String(topJ.jam).padStart(2,'0')+':00';}
+            renderTrendingTable(kata);renderSumberChart(sumber);renderJamChart(jam);renderKataChart(kata);renderNewsFeed(data.live_news||[]);updateMapData(data.live_news||[]);
+        }
+
+        // Number animation
+        function animateNumber(id,target){
+            const el=document.getElementById(id);let current=parseInt(el.textContent)||0;
+            if(current===target)return;
+            const step=Math.max(1,Math.floor(Math.abs(target-current)/20));
+            const interval=setInterval(()=>{current+=(target>current?step:-step);if((target>current-step&&target<current+step)||current===target){current=target;clearInterval(interval);}el.textContent=current;},30);
+        }
+
+        function renderTrendingTable(kata){
+            const tbody=document.getElementById('trending-body');
+            if(!kata.length){tbody.innerHTML='<tr><td colspan="4" class="empty">Belum ada data Spark</td></tr>';return;}
+            const maxFreq=Math.max(...kata.map(k=>k.frekuensi||0));
+            tbody.innerHTML=kata.map((k,i)=>{
+                const freq=k.frekuensi||0,pct=maxFreq>0?(freq/maxFreq*100):0;
+                return `<tr class="anim-slide-right" style="--delay:${i}"><td class="rank">${i+1}</td><td class="kata">${k.kata}</td><td class="freq">${freq}</td><td class="bar-cell"><div class="freq-bar" style="width:${pct}%"></div></td></tr>`;
+            }).join('');
+        }
+
+        function renderSumberChart(sumber){
+            const ctx=document.getElementById('chart-sumber').getContext('2d');
+            const theme=getChartTheme();
+            if(chartSumber)chartSumber.destroy();
+            chartSumber=new Chart(ctx,{type:'doughnut',data:{labels:sumber.map(s=>s.sumber||'Unknown'),datasets:[{data:sumber.map(s=>s.jumlah||0),backgroundColor:COLORS.bars.slice(0,sumber.length),borderWidth:2,borderColor:theme.surface}]},
+                options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11},color:theme.color}}}}
+            });
+        }
+
+        function renderJamChart(jam){
+            const ctx=document.getElementById('chart-jam').getContext('2d');
+            const theme=getChartTheme();
+            if(chartJam)chartJam.destroy();
+            const hourData=new Array(24).fill(0);jam.forEach(j=>{hourData[j.jam!=null?j.jam:0]=j.jumlah_berita||0;});
+            const maxVal=Math.max(...hourData);
+            chartJam=new Chart(ctx,{type:'bar',data:{labels:Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`),datasets:[{data:hourData,backgroundColor:hourData.map(v=>v===maxVal&&v>0?'#2563eb':'#93c5fd'),borderRadius:3,borderSkipped:false}]},
+                options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{padding:8,cornerRadius:4}},scales:{y:{beginAtZero:true,grid:{color:theme.grid},ticks:{precision:0,color:theme.color}},x:{grid:{display:false},ticks:{maxRotation:45,font:{size:9},color:theme.color}}}}
+            });
+        }
+
+        function renderKataChart(kata){
+            const ctx=document.getElementById('chart-kata').getContext('2d');
+            const theme=getChartTheme();
+            if(chartKata)chartKata.destroy();
+            chartKata=new Chart(ctx,{type:'bar',data:{labels:kata.map(k=>k.kata),datasets:[{data:kata.map(k=>k.frekuensi||0),backgroundColor:kata.map((_,i)=>COLORS.bars[i%8]),borderColor:kata.map((_,i)=>COLORS.borders[i%8]),borderWidth:1,borderRadius:4,borderSkipped:false}]},
+                options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{tooltip:{padding:8,cornerRadius:4}},scales:{x:{beginAtZero:true,grid:{color:theme.grid},ticks:{precision:0,color:theme.color}},y:{grid:{display:false},ticks:{color:theme.color}}}}
+            });
+        }
+
+        function escapeHtml(value){
+            return String(value??'').replace(/[&<>"']/g,match=>({
+                '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+            }[match]));
+        }
+
+        function safeUrl(value){
+            if(!value)return '#';
+            try{
+                const url=new URL(value,window.location.href);
+                return ['http:','https:'].includes(url.protocol)?url.href:'#';
+            }catch(e){return '#';}
+        }
+
+        function rotateNews(news){
+            const list=[...news];
+            if(list.length<2)return list;
+            const key='newspulse-feed-offset';
+            const stored=parseInt(sessionStorage.getItem(key)||'0',10);
+            const offset=Number.isFinite(stored)?stored%list.length:0;
+            sessionStorage.setItem(key,String((offset+1)%list.length));
+            return list.slice(offset).concat(list.slice(0,offset));
+        }
+
+        function sourceInitials(source){
+            const text=(source||'NP').trim();
+            const words=text.split(/\s+/).filter(Boolean);
+            return words.length>1?(words[0][0]+words[1][0]).toUpperCase():text.slice(0,2).toUpperCase();
+        }
+
+
+
+        function newsCardHtml(n, i, matchedKw){
+            const sc=(n.sumber||'').toLowerCase().replace(/[^a-z0-9_-]+/g,'-').replace(/^-+|-+$/g,'')||'unknown';
+            const waktu=n.waktu_terbit?new Date(n.waktu_terbit).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+            const kwBadge=matchedKw?`<span class="keyword-badge">${escapeHtml(matchedKw)}</span>`:'';
+            return `<article class="news-card anim-slide-up" style="--delay:${i}">
+                <div class="news-body" style="padding-left:0;">
+                    <div class="news-meta"><span class="source-badge ${sc}">${escapeHtml(n.sumber||'Unknown')}</span>${kwBadge}<time>${escapeHtml(waktu)}</time></div>
+                    <h3><a href="${safeUrl(n.url)}" target="_blank" rel="noopener">${escapeHtml(n.judul||'Tanpa judul')}</a></h3>
+                    <p class="news-desc">${escapeHtml((n.deskripsi||'').slice(0,100))}${(n.deskripsi||'').length>100?'...':''}</p>
+                </div>
+            </article>`;
+        }
+
+        function renderNewsFeed(news){
+            const feedTrending=document.getElementById('news-feed-trending');
+            const feedTerbaru=document.getElementById('news-feed-terbaru');
+            if(!news.length){
+                feedTrending.innerHTML='<div class="empty">Belum ada berita</div>';
+                feedTerbaru.innerHTML='<div class="empty">Belum ada berita</div>';
+                return;
+            }
+            // Berita Terbaru: sorted by waktu_terbit desc
+            const sorted=[...news].sort((a,b)=>new Date(b.waktu_terbit||b.timestamp||0)-new Date(a.waktu_terbit||a.timestamp||0));
+            feedTerbaru.innerHTML=sorted.slice(0,20).map((n,i)=>newsCardHtml(n,i,null)).join('');
+
+            // Berita Trending: match dengan kata trending dari Spark
+            const spark=latestData?.spark||{};
+            const trendingWords=(spark.kata_trending||[]).map(k=>k.kata?.toLowerCase()).filter(Boolean);
+            const trendingNews=[];
+            news.forEach(n=>{
+                const text=((n.judul||'')+ ' '+(n.deskripsi||'')).toLowerCase();
+                for(const kw of trendingWords){
+                    if(text.includes(kw)){trendingNews.push({...n,_kw:kw});break;}
+                }
+            });
+            if(trendingNews.length){
+                feedTrending.innerHTML=trendingNews.slice(0,20).map((n,i)=>newsCardHtml(n,i,n._kw)).join('');
+            } else {
+                feedTrending.innerHTML=sorted.slice(0,20).map((n,i)=>newsCardHtml(n,i,null)).join('');
+            }
+        }
+
+        // Tab switching
+        document.querySelectorAll('.feed-tab').forEach(tab=>{
+            tab.addEventListener('click',()=>{
+                document.querySelectorAll('.feed-tab').forEach(t=>t.classList.remove('active'));
+                tab.classList.add('active');
+                const target=tab.dataset.tab;
+                document.getElementById('news-feed-trending').style.display=target==='trending'?'':'none';
+                document.getElementById('news-feed-terbaru').style.display=target==='terbaru'?'':'none';
+            });
+        });
+
+        window.addEventListener('newspulse:themechange',()=>{
+            applyChartDefaults();
+            if(!latestData)return;
+            const spark=latestData.spark||{};
+            renderSumberChart(spark.distribusi_sumber||[]);
+            renderJamChart(spark.volume_per_jam||[]);
+            renderKataChart(spark.kata_trending||[]);
+        });
+
+        // Init
+        loadMap();fetchData();
+        setInterval(()=>{fetchData();refreshCountdown=30;},30000);
+        setInterval(()=>{refreshCountdown=Math.max(0,refreshCountdown-1);document.getElementById('refresh-timer').textContent=refreshCountdown;},1000);
+    </script>
+</body>
+</html>

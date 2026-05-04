@@ -3,3 +3,4 @@
 dashboard/data/
 __pycache__/
 *.pyc
+temp_buffer/

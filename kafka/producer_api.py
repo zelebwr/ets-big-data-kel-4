@@ -1,91 +1,132 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# NewsPulse — Producer API (GNews)
+# Mengambil top headlines Indonesia dari GNews API setiap 10 menit
+# Topic Kafka: news-api | Key: kategori berita
+# ══════════════════════════════════════════════════════════════════════════════
+
 import json
 import time
+import hashlib
 import requests
 import os
 from datetime import datetime
 from kafka import KafkaProducer
 
-# ── Konfigurasi 6 Kota sesuai spesifikasi ETS ─────────────────────
-CITIES = [
-    {"kode": "JKT", "nama": "Jakarta",   "lat": -6.21,  "lon": 106.85},
-    {"kode": "SBY", "nama": "Surabaya",  "lat": -7.25,  "lon": 112.75},
-    {"kode": "SMG", "nama": "Semarang",  "lat": -6.99,  "lon": 110.42},
-    {"kode": "MDN", "nama": "Medan",     "lat": -3.59,  "lon": 98.67},
-    {"kode": "MKS", "nama": "Makassar",  "lat": -5.14,  "lon": 119.41},
-    {"kode": "DPS", "nama": "Denpasar",  "lat": -8.67,  "lon": 115.21},
-]
+# ── Konfigurasi ──────────────────────────────────────────────────────────────
+# Daftar gratis di https://gnews.io → dapatkan API key
+GNEWS_API_KEY   = os.getenv("GNEWS_API_KEY", "c846d5deecd05dab1439b1176a01470c")
+GNEWS_URL       = "https://gnews.io/api/v4/top-headlines"
 
-OPEN_METEO_URL       = "https://api.open-meteo.com/v1/forecast"
-POLL_INTERVAL        = 600          # 10 menit sesuai spesifikasi ETS
-KAFKA_BROKER         = "localhost:9092"
-KAFKA_TOPIC          = "weather-api"
-LIVE_OUTPUT_PATH     = "../dashboard/data/live_api.json"
+POLL_INTERVAL   = 60           # Diubah ke 60 detik agar tidak terlihat berhenti
+KAFKA_BROKER    = "localhost:9092"
+KAFKA_TOPIC     = "news-api"
+LIVE_OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "dashboard", "data", "live_api.json")
+
+# Set untuk menyimpan URL yang sudah dikirim (hindari duplikat)
+sent_urls = set()
+# ─────────────────────────────────────────────────────────────────────────────
 
 
-# ── Inisialisasi Kafka Producer ────────────────────────────────────
 def create_producer() -> KafkaProducer:
+    """Inisialisasi Kafka Producer dengan idempotence & acks=all."""
     return KafkaProducer(
         bootstrap_servers=KAFKA_BROKER,
         enable_idempotence=True,        # exactly-once per partisi
-        acks="all",                     # tunggu semua ISR ack
+        acks="all",                     # tunggu semua ISR acknowledge
         value_serializer=lambda v: json.dumps(v).encode("utf-8"),
         key_serializer=lambda k: k.encode("utf-8"),
         retries=5,
     )
 
 
-# ── Fetch cuaca 1 kota dari Open-Meteo ────────────────────────────
-def fetch_weather(city: dict) -> dict | None:
+def hash_url(url: str) -> str:
+    """Hash URL untuk deduplication."""
+    return hashlib.md5(url.encode()).hexdigest()[:8]
+
+
+def fetch_news() -> list:
+    """Ambil top headlines Indonesia dari GNews API."""
     params = {
-        "latitude":  city["lat"],
-        "longitude": city["lon"],
-        "current":   "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code",
-        "timezone":  "Asia/Jakarta",
+        "country": "id",
+        "lang":    "id",
+        "max":     10,
+        "token":   GNEWS_API_KEY,
     }
     try:
-        resp = requests.get(OPEN_METEO_URL, params=params, timeout=10)
+        resp = requests.get(GNEWS_URL, params=params, timeout=15)
         resp.raise_for_status()
-        data    = resp.json()
-        current = data["current"]
+        data = resp.json()
 
-        # Struktur JSON konsisten — semua field selalu ada
-        event = {
-            "kode_kota":    city["kode"],
-            "nama_kota":    city["nama"],
-            "latitude":     city["lat"],
-            "longitude":    city["lon"],
-            "temperature":  current["temperature_2m"],       # °C
-            "humidity":     current["relative_humidity_2m"], # %
-            "wind_speed":   current["wind_speed_10m"],       # km/h
-            "weather_code": current["weather_code"],
-            "timestamp":    current["time"],                 # ISO8601 dari API
-            "fetched_at":   datetime.now().isoformat(),      # waktu fetch lokal
-        }
-        return event
+        articles = []
+        for item in data.get("articles", []):
+            image_url = (
+                item.get("image")
+                or item.get("thumbnail")
+                or item.get("urlToImage")
+                or ""
+            )
+            # Format JSON konsisten sesuai spesifikasi ETS
+            event = {
+                "judul":        item.get("title", ""),
+                "sumber":       item.get("source", {}).get("name", "GNews"),
+                "url":          item.get("url", ""),
+                "kategori":     "nasional",             # default kategori
+                "deskripsi":    item.get("description", ""),
+                "image":        image_url,              # thumbnail dari GNews
+                "thumbnail":    image_url,
+                "waktu_terbit": item.get("publishedAt", datetime.now().isoformat()),
+                "timestamp":    datetime.now().isoformat(),
+            }
+            articles.append(event)
+        return articles
 
     except requests.exceptions.RequestException as e:
-        print(f"  [ERROR] Gagal fetch {city['kode']}: {e}")
-        return None
+        print(f"  [ERROR] Gagal fetch GNews API: {e}")
+        return []
 
 
-# ── Simpan snapshot terbaru ke file lokal (untuk dashboard) ───────
 def save_live_snapshot(events: list):
+    """Simpan snapshot terbaru ke file lokal (untuk dashboard)."""
     os.makedirs(os.path.dirname(LIVE_OUTPUT_PATH), exist_ok=True)
-    with open(LIVE_OUTPUT_PATH, "w") as f:
-        json.dump(events, f, indent=2, ensure_ascii=False)
-    print(f"  [SNAPSHOT] live_api.json diperbarui — {len(events)} kota")
+
+    # Baca data lama jika ada, append data baru
+    existing = []
+    if os.path.exists(LIVE_OUTPUT_PATH):
+        try:
+            with open(LIVE_OUTPUT_PATH, "r") as f:
+                existing = json.load(f)
+        except (json.JSONDecodeError, FileNotFoundError):
+            existing = []
+
+    # Gabung, deduplicate by URL, simpan max 100 terbaru
+    all_events = events + existing
+    seen = set()
+    unique = []
+    for e in all_events:
+        url_hash = hash_url(e.get("url", ""))
+        if url_hash not in seen:
+            seen.add(url_hash)
+            unique.append(e)
+    unique = unique[:100]  # simpan max 100
+
+    with open(LIVE_OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(unique, f, indent=2, ensure_ascii=False)
+    print(f"  [SNAPSHOT] live_api.json diperbarui -- {len(events)} berita diproses, total {len(unique)}")
 
 
-# ── Main loop ─────────────────────────────────────────────────────
 def main():
-    print("=" * 55)
-    print("  WeatherPulse — Producer API (Open-Meteo)")
-    print("=" * 55)
+    print("=" * 60)
+    print("  NewsPulse -- Producer API (GNews)")
+    print("=" * 60)
     print(f"  Broker  : {KAFKA_BROKER}")
     print(f"  Topic   : {KAFKA_TOPIC}")
     print(f"  Interval: {POLL_INTERVAL // 60} menit")
-    print(f"  Kota    : {[c['kode'] for c in CITIES]}")
-    print("=" * 55 + "\n")
+    print(f"  API     : GNews (top headlines Indonesia)")
+    print("=" * 60 + "\n")
+
+    if GNEWS_API_KEY == "YOUR_GNEWS_API_KEY_HERE":
+        print("  [WARNING] API key belum diatur! Ganti GNEWS_API_KEY di producer_api.py")
+        print("  [WARNING] Daftar gratis di https://gnews.io\n")
 
     producer = create_producer()
     print("[INIT] Berhasil terhubung ke Kafka broker.\n")
@@ -95,33 +136,35 @@ def main():
         cycle += 1
         print(f"--- Cycle {cycle} | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---")
 
-        successful_events = []
+        articles = fetch_news()
+        sent_this_cycle = []
 
-        for city in CITIES:
-            event = fetch_weather(city)
-            if event is None:
+        for article in articles:
+            url_hash = hash_url(article["url"])
+
+            # Lewati jika sudah pernah dikirim
+            if url_hash in sent_urls:
                 continue
 
             future = producer.send(
                 KAFKA_TOPIC,
-                key=event["kode_kota"],
-                value=event,
+                key=article["kategori"],     # key = kategori berita
+                value=article,
             )
-            future.get(timeout=10)  # tunggu ACK sebelum lanjut
+            future.get(timeout=10)  # tunggu ACK
 
-            successful_events.append(event)
+            sent_urls.add(url_hash)
+            sent_this_cycle.append(article)
             print(
-                f"  [SENT] {event['kode_kota']:3s} | "
-                f"{event['temperature']:5.1f}°C | "
-                f"Humidity: {event['humidity']:5.1f}% | "
-                f"Wind: {event['wind_speed']:5.1f} km/h"
+                f"  [SENT] {article['sumber']:15s} | "
+                f"{article['judul'][:60]}..."
             )
 
         producer.flush()
-        print(f"  [FLUSH] {len(successful_events)}/6 kota berhasil dikirim ke Kafka")
+        print(f"  [FLUSH] {len(sent_this_cycle)} berita baru dikirim ke Kafka")
 
-        if successful_events:
-            save_live_snapshot(successful_events)
+        if articles:
+            save_live_snapshot(articles)
 
         print(f"  [SLEEP] Menunggu {POLL_INTERVAL // 60} menit...\n")
         time.sleep(POLL_INTERVAL)

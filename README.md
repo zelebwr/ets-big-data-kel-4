@@ -1,175 +1,292 @@
-# ETS Big Data &mdash; Weather Pulse: Monitor Cuaca 6 Kota Besar Indonesia
+# NewsPulse -- Analisis Tren Berita Nasional
+
+> **ETS Big Data — Topik 5**
+> PR agency yang perlu memantau isu apa yang sedang paling banyak dibicarakan media nasional dan digital.
+
+---
+
+## Panduan Cepat Menjalankan Project
+
+Jalankan perintah dari root project: `ets-big-data-kel-4`.
+
+### 1. Siapkan Kafka dan Hadoop
+
+```bash
+docker compose -f docker-compose-kafka.yml up -d
+docker compose -f docker-compose-hadoop.yml up -d
+```
+
+Buat topic Kafka dan folder HDFS:
+
+```bash
+docker exec -it kafka-broker kafka-topics --create --topic news-api --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+docker exec -it kafka-broker kafka-topics --create --topic news-rss --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/api
+docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/rss
+docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/hasil
+```
+
+### 2. Install dependency Python
+
+```bash
+pip install kafka-python requests feedparser hdfs flask
+```
+
+### 3. Jalankan pipeline data
+
+Buka terminal terpisah untuk setiap proses:
+
+```bash
+python kafka/producer_api.py
+python kafka/producer_rss.py
+python kafka/consumer_to_hdfs.py
+```
+
+### 4. Jalankan analisis Spark
+
+Buka `spark/analysis.ipynb`, jalankan semua cell, lalu pastikan hasil JSON tersimpan ke folder `dashboard/data`.
+
+File yang dibaca dashboard:
+
+```text
+dashboard/data/spark_results.json
+dashboard/data/live_api.json
+dashboard/data/live_rss.json
+```
+
+### 5. Jalankan dashboard
+
+```bash
+cd dashboard
+python app.py
+```
+
+Buka `http://localhost:5000`.
+
+### 6. Cek hasil
+
+- Kafka topic aktif: `docker exec -it kafka-broker kafka-topics --list --bootstrap-server localhost:9092`
+- HDFS berisi data: `docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news/`
+- Hadoop UI: `http://localhost:9870`
+- Dashboard Flask: `http://localhost:5000`
 
 ---
 
 ## Kelompok 4
 
-| No | Nama                              | NRP        | Job desk |
-| :-: | --------------------------------- | ---------- | ------- |
-| 1 | Jonathan Zelig Sutopo              | 5027241047 | Project Initialization |
-| 2 | Muhammad Ardiansyah Tri Wibowo     | 5027241091 | |
-| 3 | Muhammad Fatihul Qolbi Ash Shiddiqi| 5027241023 | |
-| 4 | Erlangga Valdhio Putra Sulistio    | 5027241030 | |
-| 5 | Tiara Putri Prasetya               | 5027241013 | |
+| No | Nama | NRP | Job desk |
+|:--:|------|-----|----------|
+| 1 | Jonathan Zelig Sutopo | 5027241047 | DevOps / Infrastructure |
+| 2 | Muhammad Ardiansyah Tri Wibowo | 5027241091 | Kafka Producer API |
+| 3 | Muhammad Fatihul Qolbi Ash Shiddiqi | 5027241023 | Kafka Producer RSS + Consumer HDFS |
+| 4 | Erlangga Valdhio Putra Sulistio | 5027241030 | Apache Spark Analysis |
+| 5 | Tiara Putri Prasetya | 5027241013 | Dashboard Flask |
 
 ---
 
-## A. Project Initialization
+## Arsitektur Sistem
 
-### 1. Initial Project Folder Structure
-
-Command:
-
-```bash
-mkdir -p kafka spark dashboard dashboard/{templates,static,data}
-touch kafka/producer_api.py kafka/producer_rss.py kafka/consumer_to_hdfs.py spark/analysis.ipynb dashboard/app.py dashboard/templates/index.html dashboard/statis/style.css README.md
+```
+┌─────────────────┐     ┌─────────────────┐
+│  GNews API      │     │  RSS Feeds      │
+│  (top headlines)│     │  Kompas + Tempo  │
+└────────┬────────┘     └────────┬────────┘
+         │                       │
+    producer_api.py         producer_rss.py
+         │                       │
+    ┌────▼────┐            ┌─────▼────┐
+    │news-api │            │ news-rss │
+    │ (Kafka) │            │ (Kafka)  │
+    └────┬────┘            └────┬─────┘
+         │                      │
+         └──────┬───────────────┘
+                │
+       consumer_to_hdfs.py
+                │
+         ┌──────▼──────┐
+         │    HDFS     │
+         │ /data/news/ │
+         └──────┬──────┘
+                │
+         analysis.ipynb (Spark)
+                │
+         ┌──────▼──────────┐
+         │ spark_results   │
+         └──────┬──────────┘
+                │
+         ┌──────▼──────────┐
+         │  Flask Dashboard │
+         │  localhost:5000  │
+         └─────────────────┘
 ```
 
-### 2. Setup Kafka via Docker Compose
+---
 
-Command: 
+## A. Project Initialization (Anggota 1 — DevOps)
+
+### 1. Setup Kafka via Docker Compose
 
 ```bash
 docker compose -f docker-compose-kafka.yml up -d
 docker compose -f docker-compose-kafka.yml ps
 ```
 
-### 3. Make 2 Topic
-
-Command:
+### 2. Create 2 Kafka Topics
 
 ```bash
 docker exec -it kafka-broker kafka-topics --create --topic news-api --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
 docker exec -it kafka-broker kafka-topics --create --topic news-rss --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-docker exec -it kafka-broker kafka-topics --list --boostrap-server localhost:9092
 ```
 
-### 4. Setup Hadoop via Dokcer Compose
+### 3. Verify Topics
 
 ```bash
-docker rm -f hadoop-resourcemanager -f hadoop-nodemanager -f hadoop-datanode -f haddop-namenode
+docker exec -it kafka-broker kafka-topics --list --bootstrap-server localhost:9092
+# Expected: news-api, news-rss
+```
+
+### 4. Setup Hadoop via Docker Compose
+
+```bash
 docker compose -f docker-compose-hadoop.yml up -d
 docker compose -f docker-compose-hadoop.yml ps
 ```
 
-### 5. Make Directory Structure on HDFS
-
-Command:
+### 5. Create HDFS Directory Structure
 
 ```bash
-docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/{api,rss,hasil}
+docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/api
+docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/rss
+docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/hasil
 docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news/
 ```
 
-### 7. Verify HDFS Web UI
+### 6. Verify HDFS Web UI
 
-### 8. Verify End-to-End Infrastructure
+Buka browser → `http://localhost:9870`
 
-Command:
+### 7. Verify End-to-End Infrastructure
 
 ```bash
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 docker exec -it kafka-broker kafka-topics --list --bootstrap-server localhost:9092
-docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news
+docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news/
 docker exec -it hadoop-namenode hdfs dfsadmin -report
 ```
 
 ---
 
-## B. Kafka Producer API
+## B. Kafka Producer API (Anggota 2)
 
-### 1. Test Weather API
-
-Command: 
+### 1. Install Dependencies
 
 ```bash
-docker exec -it kafka-broker kafka-console-consumer --topic news-api --from-beginning --bootstrap-server localhos
-t:9092
+pip install kafka-python requests
 ```
 
-### 2. Check Consumer Group 
+### 2. Setup API Key
 
-Command:
+Daftar gratis di https://gnews.io → dapatkan API key → edit `GNEWS_API_KEY` di `kafka/producer_api.py`
 
-```bash
-docker exec -it kafka-broker kafka-consumer-groups --bootstrap-server localhost:9092 --list
-```
+### 3. Run Producer
 
-### 3. Check Offset Detail + Lag Topic Weahter API
-
-Command: 
-
-```bash
-docker exec -it kafka-broker kafka-consumer-groups --bootstrap-server localhost:9092 --descibe --group console-consumer-15478
-```
-
-### 4. Check `live_api.json`
-
-Command:
-
-```bash
-cat dashboard/data/live_api.json
-```
-
-## C. Weather Data Producer (API) = Anggota 2
-
-### 1. Install Dependency
-```bash
-python -m pip install kafka-python requests
-```
-
-### 2. Implementation (Running the Script)
-Script kafka/producer_api.py akan menarik data suhu, kelembapan, dan kecepatan angin untuk kota JKT, SBY, SMG, MDN, MKS, DPS setiap 10 menit.
 ```bash
 python kafka/producer_api.py
 ```
 
-### 3. Verification (Checking Data Flow)
-Untuk memastikan data benar-benar sampai ke Kafka Broker, buka terminal baru dan jalankan perintah konsumer internal Kafka:
-```bash
-docker exec -it kafka-broker kafka-console-consumer --topic weather-api --from-beginning --property print.key=true --bootstrap-server localhost:9092
-```
-Hasil yang diharapkan:
-Terminal akan menampilkan Key (Kode Kota) diikuti oleh JSON data cuaca seperti ini:
-JKT {"kode_kota": "JKT", "temperature": 24.5, ...}
+### 4. Verify Data Flow
 
-## 4. Data Ingestion (RSS) & HDFS Storage = Anngota 3
-
-### 1. Install Dependency
-Pastikan pustaka untuk parsing RSS dan koneksi Kafka sudah terpasang.
 ```bash
-python -m pip install kafka-python feedparser
-```
-### 2. HDFS Infrastructure Setup (Manual)
-Sebelum menjalankan consumer, folder tujuan di HDFS harus dibuat secara manual agar tidak terjadi error "Directory not found".
-```bash
-# Membuat folder induk dan sub-folder data
-docker exec hadoop-namenode hdfs dfs -mkdir -p /data/weather/api
-docker exec hadoop-namenode hdfs dfs -mkdir -p /data/weather/rss
-docker exec hadoop-namenode hdfs dfs -mkdir -p /data/weather/hasil
+docker exec -it kafka-broker kafka-console-consumer --topic news-api --from-beginning --property print.key=true --bootstrap-server localhost:9092
 ```
 
-### 3. Implementation (Running the Scripts)
-- **Running Producer RSS**
-Script ini mengambil berita cuaca terbaru dari portal berita setiap 5 menit.
+---
+
+## C. Kafka Producer RSS + Consumer HDFS (Anggota 3)
+
+### 1. Install Dependencies
+
 ```bash
-# Jalankan di Terminal 1
+pip install kafka-python feedparser hdfs
+```
+
+### 2. Run Producer RSS
+
+```bash
 python kafka/producer_rss.py
 ```
-Catatan: Jika muncul "0 artikel baru", berarti belum ada berita cuaca terbaru yang dirilis oleh portal berita pada saat script dijalankan.
 
-- **Running Consumer to HDFS**
-Script ini bertugas menyedot data dari topik Kafka (weather-api dan weather-rss) lalu menyimpannya ke Hadoop.
+### 3. Run Consumer to HDFS
+
 ```bash
-# Jalankan di Terminal 2
 python kafka/consumer_to_hdfs.py
 ```
 
-### Verification (Checking HDFS Data)
-Untuk memastikan data telah tersimpan secara permanen di Hadoop, jalankan perintah berikut:
+### 4. Verify HDFS Data
+
 ```bash
-# Melihat daftar file yang masuk ke HDFS secara rekursif
-docker exec hadoop-namenode hdfs dfs -ls -R /data/weather/
+docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news/
 ```
-Hasil yang diharapkan:
-Muncul daftar file .json di dalam folder /data/weather/api/ (dan /rss/ jika berita sudah tersedia).
+
+---
+
+## D. Apache Spark Analysis (Anggota 4)
+
+### 1. Analisis yang dilakukan
+
+| # | Analisis | Metode |
+|---|----------|--------|
+| 1 | Kata paling sering di judul (Top 15) | split() + explode() + filter stopwords |
+| 2 | Distribusi berita per sumber | groupBy("sumber").count() |
+| 3 | Volume publikasi per jam | HOUR(TO_TIMESTAMP(waktu_terbit)) |
+| **Bonus** | K-Means Clustering (MLlib) | TF-IDF + K-Means (k=5) |
+
+### 2. Run Notebook
+
+```bash
+# Di Jupyter Notebook lokal atau Google Colab
+# Buka spark/analysis.ipynb dan jalankan semua cell
+```
+
+**Catatan Colab:** Jika menggunakan Google Colab, export file JSON dari HDFS ke Google Drive terlebih dahulu.
+
+---
+
+## E. Dashboard Flask (Anggota 5)
+
+### 1. Install Dependencies
+
+```bash
+pip install flask
+```
+
+### 2. Run Dashboard
+
+```bash
+cd dashboard
+python app.py
+# Buka http://localhost:5000
+```
+
+### 3. Fitur Dashboard
+
+| Panel | Deskripsi | Data Source |
+|-------|-----------|------------|
+| Kata Trending Top 15 | Tabel kata + frekuensi | spark_results.json |
+| Distribusi per Sumber | Bar chart Kompas vs Tempo vs GNews | spark_results.json |
+| Volume per Jam | Bar chart 24 jam (**Bonus Chart.js**) | spark_results.json |
+| Kata Trending Chart | Horizontal bar chart (**Bonus Chart.js**) | spark_results.json |
+| Peta Indonesia | Distribusi berita per wilayah | live_api.json + live_rss.json |
+| Feed Berita Terbaru | Live feed + auto-refresh 30 detik | live_api.json + live_rss.json |
+
+---
+
+## Tantangan & Solusi
+
+| Tantangan | Solusi |
+|-----------|-------|
+| RSS feed kadang lambat/timeout | Retry mechanism + timeout handler di producer |
+| Duplikat berita antar RSS | Hash URL 8 karakter sebagai deduplication key |
+| HDFS upload dari Windows | Docker cp + hdfs dfs -put via subprocess, fallback ke hdfs Python library |
+| Spark baca dari HDFS | Fallback ke file lokal jika HDFS tidak tersedia |
