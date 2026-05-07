@@ -70,11 +70,17 @@ docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/rss
 docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/hasil
 ```
 
+<img width="1515" height="246" alt="image" src="https://github.com/user-attachments/assets/98252113-ef8a-4c19-aa33-5fa05190fe28" />
+
+
 ### 2. Install dependency Python
 
 ```bash
 pip install kafka-python requests feedparser hdfs flask
 ```
+
+<img width="1493" height="176" alt="image" src="https://github.com/user-attachments/assets/67676f05-ef2d-419a-a777-cdb923705c34" />
+
 
 ### 3. Jalankan pipeline data
 
@@ -85,6 +91,11 @@ python kafka/producer_api.py
 python kafka/producer_rss.py
 python kafka/consumer_to_hdfs.py
 ```
+<img width="643" height="167" alt="image" src="https://github.com/user-attachments/assets/985725ef-e306-4b1e-881a-10bdc2e0b097" />
+
+<img width="653" height="185" alt="image" src="https://github.com/user-attachments/assets/3d368291-c548-46f9-be99-08954e35394d" />
+
+<img width="1521" height="224" alt="image" src="https://github.com/user-attachments/assets/c570bfc7-34b5-431e-a449-697d00a37fab" />
 
 ### 4. Jalankan analisis Spark
 
@@ -106,6 +117,9 @@ python scripts/run_analysis.py --watch --interval 120
 cd dashboard
 python app.py
 ```
+
+<img width="735" height="155" alt="image" src="https://github.com/user-attachments/assets/45993939-7774-4e59-8441-814a720bdf69" />
+
 
 Buka `http://localhost:5000`.
 
