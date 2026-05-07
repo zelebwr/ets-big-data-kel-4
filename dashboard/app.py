@@ -1,7 +1,7 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # NewsPulse — Dashboard Flask
 # GET /          → render index.html
-# GET /api/data  → return JSON gabungan spark + live data
+# GET /api/data  → return JSON hasil olahan Spark
 # ══════════════════════════════════════════════════════════════════════════════
 
 import json
@@ -34,27 +34,19 @@ def index():
 
 @app.route("/api/data")
 def api_data():
-    """Return JSON gabungan semua data untuk dashboard."""
+    """Return JSON hasil olahan Spark untuk dashboard."""
     spark_results = load_json("spark_results.json", {
         "kata_trending": [],
         "distribusi_sumber": [],
         "volume_per_jam": [],
+        "live_news": [],
     })
-    live_api = load_json("live_api.json", [])
-    live_rss = load_json("live_rss.json", [])
-
-    # Gabung semua berita terbaru
-    all_news = live_api + live_rss
-    # Sort by timestamp descending
-    all_news.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
-    # Max 50 berita terbaru
-    all_news = all_news[:50]
 
     return jsonify({
         "spark": spark_results,
-        "live_news": all_news,
-        "total_api": len(live_api),
-        "total_rss": len(live_rss),
+        "live_news": spark_results.get("live_news", []),
+        "total_api": spark_results.get("total_api", 0),
+        "total_rss": spark_results.get("total_rss", 0),
     })
 
 

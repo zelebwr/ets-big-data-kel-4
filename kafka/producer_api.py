@@ -14,11 +14,11 @@ from kafka import KafkaProducer
 
 # ── Konfigurasi ──────────────────────────────────────────────────────────────
 # Daftar gratis di https://gnews.io → dapatkan API key
-GNEWS_API_KEY   = os.getenv("GNEWS_API_KEY", "c846d5deecd05dab1439b1176a01470c")
+GNEWS_API_KEY   = os.getenv("GNEWS_API_KEY", "YOUR_GNEWS_API_KEY_HERE")
 GNEWS_URL       = "https://gnews.io/api/v4/top-headlines"
 
-POLL_INTERVAL   = 60           # Diubah ke 60 detik agar tidak terlihat berhenti
-KAFKA_BROKER    = "localhost:9092"
+POLL_INTERVAL   = int(os.getenv("API_POLL_INTERVAL_SECONDS", "60"))
+KAFKA_BROKER    = os.getenv("KAFKA_BROKER", "localhost:9092")
 KAFKA_TOPIC     = "news-api"
 LIVE_OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "dashboard", "data", "live_api.json")
 
@@ -120,12 +120,12 @@ def main():
     print("=" * 60)
     print(f"  Broker  : {KAFKA_BROKER}")
     print(f"  Topic   : {KAFKA_TOPIC}")
-    print(f"  Interval: {POLL_INTERVAL // 60} menit")
+    print(f"  Interval: {POLL_INTERVAL} detik")
     print(f"  API     : GNews (top headlines Indonesia)")
     print("=" * 60 + "\n")
 
     if GNEWS_API_KEY == "YOUR_GNEWS_API_KEY_HERE":
-        print("  [WARNING] API key belum diatur! Ganti GNEWS_API_KEY di producer_api.py")
+        print("  [WARNING] API key belum diatur! Set GNEWS_API_KEY di environment/.env")
         print("  [WARNING] Daftar gratis di https://gnews.io\n")
 
     producer = create_producer()
@@ -166,7 +166,7 @@ def main():
         if articles:
             save_live_snapshot(articles)
 
-        print(f"  [SLEEP] Menunggu {POLL_INTERVAL // 60} menit...\n")
+        print(f"  [SLEEP] Menunggu {POLL_INTERVAL} detik...\n")
         time.sleep(POLL_INTERVAL)
 
 

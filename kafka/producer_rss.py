@@ -26,8 +26,9 @@ RSS_FEEDS = [
 ]
 
 POLL_INTERVAL_SECONDS = 300  # 5 menit sesuai spesifikasi ETS
+POLL_INTERVAL_SECONDS = int(os.getenv("RSS_POLL_INTERVAL_SECONDS", str(POLL_INTERVAL_SECONDS)))
 
-KAFKA_BROKER = "localhost:9092"
+KAFKA_BROKER = os.getenv("KAFKA_BROKER", "localhost:9092")
 KAFKA_TOPIC  = "news-rss"
 
 LIVE_OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "dashboard", "data", "live_rss.json")

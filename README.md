@@ -5,7 +5,50 @@
 
 ---
 
-## Panduan Cepat Menjalankan Project
+## Panduan Cepat Menjalankan Project (WSL)
+
+Disarankan jalankan project dari Ubuntu WSL agar dependency dan Docker integration lebih stabil.
+
+### 0. Persiapan WSL
+
+1. Install Docker Desktop, lalu aktifkan **Settings > Resources > WSL Integration** untuk distro Ubuntu kamu.
+2. Buka terminal WSL, masuk ke folder project:
+
+```bash
+cd /mnt/d/Github/ets-big-data-kel-4
+```
+
+3. Siapkan environment file (opsional tapi direkomendasikan):
+
+```bash
+cp .env.example .env
+# lalu isi GNEWS_API_KEY di .env
+```
+
+4. Jalankan setup otomatis:
+
+```bash
+chmod +x scripts/*.sh
+./scripts/setup_wsl.sh
+```
+
+5. Jalankan seluruh pipeline:
+
+```bash
+./scripts/run_wsl.sh
+```
+
+6. Stop semua service:
+
+```bash
+./scripts/stop_wsl.sh
+```
+
+Dashboard akan tersedia di `http://localhost:5000`, dan analisis Spark akan di-refresh otomatis tiap 2 menit.
+
+---
+
+## Panduan Manual (Alternatif)
 
 Jalankan perintah dari root project: `ets-big-data-kel-4`.
 
@@ -45,14 +88,16 @@ python kafka/consumer_to_hdfs.py
 
 ### 4. Jalankan analisis Spark
 
-Buka `spark/analysis.ipynb`, jalankan semua cell, lalu pastikan hasil JSON tersimpan ke folder `dashboard/data`.
+Jalankan job Spark yang membaca data langsung dari HDFS dan menulis hasil olahan ke `dashboard/data/spark_results.json`:
 
-File yang dibaca dashboard:
+```bash
+python scripts/run_analysis.py --once
+```
 
-```text
-dashboard/data/spark_results.json
-dashboard/data/live_api.json
-dashboard/data/live_rss.json
+Jika ingin berjalan terus-menerus, gunakan mode watch atau jalankan `scripts/run_wsl.sh`:
+
+```bash
+python scripts/run_analysis.py --watch --interval 120
 ```
 
 ### 5. Jalankan dashboard
@@ -64,7 +109,28 @@ python app.py
 
 Buka `http://localhost:5000`.
 
-### 6. Cek hasil
+### 6. Update analisis otomatis tiap 2 menit
+
+Jalankan cron installer berikut supaya `spark_results.json` di-refresh setiap dua menit:
+
+```bash
+chmod +x scripts/*.sh
+./scripts/install_cron_analysis.sh
+```
+
+Pantau log-nya dengan:
+
+```bash
+tail -f logs/cron_analysis.log
+```
+
+Jika ingin menghapus cron:
+
+```bash
+./scripts/remove_cron_analysis.sh
+```
+
+### 7. Cek hasil
 
 - Kafka topic aktif: `docker exec -it kafka-broker kafka-topics --list --bootstrap-server localhost:9092`
 - HDFS berisi data: `docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news/`
@@ -246,7 +312,7 @@ docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news/
 
 ```bash
 # Di Jupyter Notebook lokal atau Google Colab
-# Buka spark/analysis.ipynb dan jalankan semua cell
+# Jalankan scripts/run_analysis.py --once atau buka spark/analysis.ipynb untuk eksperimen
 ```
 
 **Catatan Colab:** Jika menggunakan Google Colab, export file JSON dari HDFS ke Google Drive terlebih dahulu.
@@ -277,8 +343,8 @@ python app.py
 | Distribusi per Sumber | Bar chart Kompas vs Tempo vs GNews | spark_results.json |
 | Volume per Jam | Bar chart 24 jam (**Bonus Chart.js**) | spark_results.json |
 | Kata Trending Chart | Horizontal bar chart (**Bonus Chart.js**) | spark_results.json |
-| Peta Indonesia | Distribusi berita per wilayah | live_api.json + live_rss.json |
-| Feed Berita Terbaru | Live feed + auto-refresh 30 detik | live_api.json + live_rss.json |
+| Peta Indonesia | Distribusi berita per wilayah | spark_results.json |
+| Feed Berita Terbaru | Live feed + auto-refresh 30 detik | spark_results.json |
 
 ---
 
@@ -289,4 +355,4 @@ python app.py
 | RSS feed kadang lambat/timeout | Retry mechanism + timeout handler di producer |
 | Duplikat berita antar RSS | Hash URL 8 karakter sebagai deduplication key |
 | HDFS upload dari Windows | Docker cp + hdfs dfs -put via subprocess, fallback ke hdfs Python library |
-| Spark baca dari HDFS | Fallback ke file lokal jika HDFS tidak tersedia |
+| Spark baca dari HDFS | Spark job membaca path HDFS langsung, lalu dashboard hanya membaca output olahan Spark |

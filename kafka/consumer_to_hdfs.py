@@ -5,7 +5,6 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 import json
-import hashlib
 import threading
 import os
 import time
@@ -14,7 +13,7 @@ from datetime import datetime
 from kafka import KafkaConsumer
 
 # ── Konfigurasi ──────────────────────────────────────────────────────────────
-KAFKA_BROKER    = "localhost:9092"
+KAFKA_BROKER    = os.getenv("KAFKA_BROKER", "localhost:9092")
 TOPIC_API       = "news-api"
 TOPIC_RSS       = "news-rss"
 GROUP_ID        = "news-consumer"
@@ -25,11 +24,9 @@ HDFS_PATH_RSS   = "/data/news/rss"
 # Folder sementara sebelum upload ke HDFS
 LOCAL_TEMP_DIR  = os.path.join(os.path.dirname(__file__), "..", "temp_buffer")
 
-# Juga update file dashboard
-LIVE_API_PATH   = os.path.join(os.path.dirname(__file__), "..", "dashboard", "data", "live_api.json")
-LIVE_RSS_PATH   = os.path.join(os.path.dirname(__file__), "..", "dashboard", "data", "live_rss.json")
-
-FLUSH_INTERVAL  = 120   # flush ke HDFS setiap 2 menit
+FLUSH_INTERVAL  = int(os.getenv("FLUSH_INTERVAL_SECONDS", "120"))
+HDFS_WEB_URL    = os.getenv("HDFS_WEB_URL", "http://localhost:9870")
+HDFS_USER       = os.getenv("HDFS_USER", "root")
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Buffer per topic (diakses dari 2 thread, pakai lock)
@@ -49,7 +46,7 @@ hdfs_client = None
 
 try:
     from hdfs import InsecureClient
-    hdfs_client = InsecureClient("http://localhost:9870", user="root")
+    hdfs_client = InsecureClient(HDFS_WEB_URL, user=HDFS_USER)
     # Test koneksi — cek apakah bisa resolve hostname datanode
     hdfs_client.status("/", strict=False)
     # Test write kecil untuk memastikan redirect ke datanode bisa jalan
@@ -117,38 +114,9 @@ def put_to_hdfs(data: list, hdfs_path: str, filename: str):
         put_to_hdfs_subprocess(data, hdfs_path, filename)
 
 
-def update_dashboard_file(data: list, filepath: str):
-    """Update file JSON untuk dashboard."""
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-
-    existing = []
-    if os.path.exists(filepath):
-        try:
-            with open(filepath, "r") as f:
-                existing = json.load(f)
-        except (json.JSONDecodeError, FileNotFoundError):
-            existing = []
-
-    # Gabung data baru + lama, deduplicate by URL, max 100 entries
-    combined = data + existing
-    seen = set()
-    unique = []
-    for item in combined:
-        url = item.get("url", "")
-        key = hashlib.md5(url.encode()).hexdigest()[:8] if url else item.get("judul", "")
-        if key in seen:
-            continue
-        seen.add(key)
-        unique.append(item)
-    combined = unique[:100]
-
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(combined, f, indent=2, ensure_ascii=False)
-
-
 def flush_buffer(buffer: list, lock: threading.Lock, hdfs_path: str,
                  dashboard_path: str, label: str):
-    """Ambil isi buffer, upload ke HDFS, update dashboard file."""
+    """Ambil isi buffer dan upload ke HDFS."""
     with lock:
         if not buffer:
             return
@@ -160,7 +128,6 @@ def flush_buffer(buffer: list, lock: threading.Lock, hdfs_path: str,
 
     print(f"  [FLUSH] {label.upper()}: {len(data_to_flush)} event → {hdfs_path}/{filename}")
     put_to_hdfs(data_to_flush, hdfs_path, filename)
-    update_dashboard_file(data_to_flush, dashboard_path)
 
 
 def consume_topic(topic: str, buffer: list, lock: threading.Lock, label: str):
@@ -197,8 +164,8 @@ def flush_loop():
         time.sleep(FLUSH_INTERVAL)
         now = datetime.now().strftime("%H:%M:%S")
         print(f"\n[SCHEDULER] {now} — Flushing ke HDFS...")
-        flush_buffer(buffer_api, lock_api, HDFS_PATH_API, LIVE_API_PATH, "api")
-        flush_buffer(buffer_rss, lock_rss, HDFS_PATH_RSS, LIVE_RSS_PATH, "rss")
+        flush_buffer(buffer_api, lock_api, HDFS_PATH_API, None, "api")
+        flush_buffer(buffer_rss, lock_rss, HDFS_PATH_RSS, None, "rss")
 
 
 def main():
@@ -234,8 +201,8 @@ def main():
         # Flush pertama setelah consumer sempat baca beberapa pesan
         time.sleep(15)
         print("[MAIN] Initial flush...")
-        flush_buffer(buffer_api, lock_api, HDFS_PATH_API, LIVE_API_PATH, "api")
-        flush_buffer(buffer_rss, lock_rss, HDFS_PATH_RSS, LIVE_RSS_PATH, "rss")
+        flush_buffer(buffer_api, lock_api, HDFS_PATH_API, None, "api")
+        flush_buffer(buffer_rss, lock_rss, HDFS_PATH_RSS, None, "rss")
 
         # Keep main thread alive
         while True:
@@ -243,8 +210,8 @@ def main():
 
     except KeyboardInterrupt:
         print("\n[STOP] Consumer dihentikan. Flush buffer terakhir...")
-        flush_buffer(buffer_api, lock_api, HDFS_PATH_API, LIVE_API_PATH, "api")
-        flush_buffer(buffer_rss, lock_rss, HDFS_PATH_RSS, LIVE_RSS_PATH, "rss")
+        flush_buffer(buffer_api, lock_api, HDFS_PATH_API, None, "api")
+        flush_buffer(buffer_rss, lock_rss, HDFS_PATH_RSS, None, "rss")
         print("[STOP] Selesai.")
 
 
