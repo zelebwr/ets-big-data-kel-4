@@ -220,6 +220,8 @@ docker compose -f docker-compose-kafka.yml ps
 docker exec -it kafka-broker kafka-topics --create --topic news-api --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
 docker exec -it kafka-broker kafka-topics --create --topic news-rss --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 ```
+<img width="1205" height="112" alt="image" src="https://github.com/user-attachments/assets/ee15ddeb-ed1a-4925-b4fb-54c6dc6be940" />
+
 
 ### 3. Verify Topics
 
