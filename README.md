@@ -358,6 +358,8 @@ docker exec -it hadoop-namenode hdfs dfs -ls -R /data/news/
 # Di Jupyter Notebook lokal atau Google Colab
 # Jalankan scripts/run_analysis.py atau buka spark/analysis.ipynb untuk eksperimen
 ```
+<img width="1182" height="929" alt="image" src="https://github.com/user-attachments/assets/72add412-6b94-4dc8-a280-30e2abac07c5" />
+
 
 **Catatan Colab:** Jika menggunakan Google Colab, export file JSON dari HDFS ke Google Drive terlebih dahulu.
 
