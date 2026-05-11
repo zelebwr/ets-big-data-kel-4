@@ -11,6 +11,9 @@ import requests
 import os
 from datetime import datetime
 from kafka import KafkaProducer
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # ── Konfigurasi ──────────────────────────────────────────────────────────────
 # Daftar gratis di https://gnews.io → dapatkan API key

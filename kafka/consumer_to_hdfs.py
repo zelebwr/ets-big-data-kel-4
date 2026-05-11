@@ -23,6 +23,7 @@ HDFS_PATH_RSS   = "/data/news/rss"
 
 # Folder sementara sebelum upload ke HDFS
 LOCAL_TEMP_DIR  = os.path.join(os.path.dirname(__file__), "..", "temp_buffer")
+DASHBOARD_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "dashboard", "data")
 
 FLUSH_INTERVAL  = int(os.getenv("FLUSH_INTERVAL_SECONDS", "120"))
 HDFS_WEB_URL    = os.getenv("HDFS_WEB_URL", "http://localhost:9870")
@@ -128,6 +129,11 @@ def flush_buffer(buffer: list, lock: threading.Lock, hdfs_path: str,
 
     print(f"  [FLUSH] {label.upper()}: {len(data_to_flush)} event → {hdfs_path}/{filename}")
     put_to_hdfs(data_to_flush, hdfs_path, filename)
+
+    os.makedirs(DASHBOARD_DATA_DIR, exist_ok=True)
+    live_file = os.path.join(DASHBOARD_DATA_DIR, f"live_{label}.json")
+    with open(live_file, "w", encoding="utf-8") as f:
+        json.dump(data_to_flush, f, indent=2, ensure_ascii=False)
 
 
 def consume_topic(topic: str, buffer: list, lock: threading.Lock, label: str):

@@ -42,9 +42,12 @@ def api_data():
         "live_news": [],
     })
 
+    live_api = load_json("live_api.json", [])
+    live_rss = load_json("live_rss.json", [])
+    
     return jsonify({
         "spark": spark_results,
-        "live_news": spark_results.get("live_news", []),
+        "live_news": live_api + live_rss,
         "total_api": spark_results.get("total_api", 0),
         "total_rss": spark_results.get("total_rss", 0),
     })
