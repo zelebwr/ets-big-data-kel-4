@@ -229,6 +229,8 @@ docker exec -it kafka-broker kafka-topics --create --topic news-rss --bootstrap-
 docker exec -it kafka-broker kafka-topics --list --bootstrap-server localhost:9092
 # Expected: news-api, news-rss
 ```
+<img width="990" height="55" alt="image" src="https://github.com/user-attachments/assets/3c1eff49-8439-4568-b667-8d098ab68b77" />
+
 
 ### 4. Setup Hadoop via Docker Compose
 
