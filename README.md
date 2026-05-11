@@ -166,8 +166,6 @@ Jika ingin berjalan terus-menerus, gunakan mode watch atau jalankan `scripts/run
 python scripts/run_analysis.py --watch --interval 120
 ```
 
-> 📸 **Screenshot wajib di sini:** `spark_analysis_output.png` — output terminal setelah Spark selesai memproses
-
 ### 5. Jalankan dashboard
 
 ```bash
@@ -180,11 +178,6 @@ python app.py
 
 Buka `http://localhost:5000`.
 
-> 📸 **Screenshot wajib di sini:**
-> - `dashboard_home.png` — tampilan penuh dashboard
-> - `dashboard_trending.png` — chart kata trending Top 15
-> - `dashboard_sumber.png` — chart distribusi per sumber
-> - `dashboard_volume_jam.png` — chart volume per jam
 
 ### 6. Update analisis otomatis tiap 2 menit
 
@@ -214,10 +207,6 @@ Jika ingin menghapus cron:
 - Hadoop UI: `http://localhost:9870`
 - Dashboard Flask: `http://localhost:5000`
 
-> 📸 **Screenshot wajib di sini:**
-> - `hdfs_overview.png` — halaman utama HDFS Web UI di `http://localhost:9870`
-> - `hdfs_directory.png` — browser HDFS menampilkan folder `/data/news/api/`, `/data/news/rss/`, `/data/news/hasil/` beserta isinya
-> - `hdfs_datanodes.png` — tab Datanodes di HDFS Web UI
 
 ---
 
