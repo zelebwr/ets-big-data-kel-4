@@ -211,6 +211,8 @@ Jika ingin menghapus cron:
 docker compose -f docker-compose-kafka.yml up -d
 docker compose -f docker-compose-kafka.yml ps
 ```
+<img width="1208" height="237" alt="image" src="https://github.com/user-attachments/assets/daa0a191-94c1-42ff-8b24-75511370c382" />
+
 
 ### 2. Create 2 Kafka Topics
 
