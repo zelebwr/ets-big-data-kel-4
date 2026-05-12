@@ -1,3 +1,4 @@
+trap 'kill $(jobs -p) 2>/dev/null; exit' SIGINT SIGTERM
 if command -v uv &> /dev/null; then
     PKG_CMD="uv pip install -r requirements.txt --link-mode=copy"
     EXEC_CMD="uv run"
@@ -15,3 +16,4 @@ $EXEC_CMD kafka/producer_rss.py &
 $EXEC_CMD kafka/consumer_to_hdfs.py &
 $EXEC_CMD scripts/spark_analysis.py --watch --interval 120 &
 $EXEC_CMD dashboard/app.py &
+wait

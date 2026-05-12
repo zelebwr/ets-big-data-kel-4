@@ -102,6 +102,31 @@ chmod +x scripts/*.sh
 
 Dashboard akan tersedia di `http://localhost:5000`, dan analisis Spark akan di-refresh otomatis tiap 2 menit.
 
+### Run All After Initial Setup Done
+
+Setup is simply done by doing:
+
+```bash
+docker compose -f docker-compose-kafka.yml -f docker-compose-hadoop.yml up -d
+docker exec -it kafka-broker kafka-topics --create --topic news-api --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+docker exec -it kafka-broker kafka-topics --create --topic news-rss --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+docker exec -it hadoop-namenode hdfs dfs -mkdir -p /data/news/{api,rss,hasil}
+```
+
+Setup the DNS mapping for your WSL: 
+
+```bash 
+sudo sh -c 'echo "127.0.0.1 datanode" >> /etc/hosts'
+sudo sh -c 'echo "127.0.0.1 namenode" >> /etc/hosts'
+```
+
+Run the `run_all.sh` script:
+
+```bash
+./scripts/run_all.sh
+```
+
+
 ---
 
 ## Panduan Manual (Alternatif)
