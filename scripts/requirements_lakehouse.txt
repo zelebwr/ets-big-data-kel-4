@@ -1,0 +1,22 @@
+# Requirements untuk Data Lakehouse NewsPulse
+# Install dengan: pip install -r requirements_lakehouse.txt
+
+# Core PySpark + Delta Lake
+pyspark>=3.4.0
+delta-spark>=3.1.0
+
+# Data Processing
+pandas>=1.5.0
+numpy>=1.23.0
+
+# Utilities
+pyarrow>=11.0.0
+python-dotenv>=0.21.0
+
+# Optional: Untuk bonus features
+flask>=2.3.0  # Jika update dashboard
+requests>=2.28.0
+
+# Development/Testing
+pytest>=7.2.0
+black>=23.0.0

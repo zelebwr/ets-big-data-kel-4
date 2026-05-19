@@ -1,0 +1,188 @@
+============================================================
+  NewsPulse -- Producer RSS (Kompas & Tempo Nasional)
+============================================================
+  Broker  : localhost:9092
+  Topic   : news-rss
+  Interval: 5 menit
+  Feeds   : ['Kompas', 'Tempo']
+============================================================
+
+[INIT] Berhasil terhubung ke Kafka broker.
+
+--- Cycle 1 | 2026-05-08 06:57:35 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 50 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 50
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 50
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 2 | 2026-05-08 07:02:47 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 49)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 49 artikel diproses, total 50
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 3 | 2026-05-08 07:08:00 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 2 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 2
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 4 | 2026-05-08 07:13:14 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 5 | 2026-05-08 07:18:25 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 6 | 2026-05-08 07:23:35 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 7 | 2026-05-08 07:28:46 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 8 | 2026-05-08 07:33:56 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 9 | 2026-05-08 07:39:07 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 10 | 2026-05-08 07:44:21 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 11 | 2026-05-08 07:49:37 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 12 | 2026-05-08 07:54:51 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 13 | 2026-05-08 08:00:04 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 14 | 2026-05-08 08:05:16 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 15 | 2026-05-08 08:10:28 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 49)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 49 artikel diproses, total 52
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 16 | 2026-05-08 08:15:43 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 1 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 1
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 53
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 17 | 2026-05-08 08:20:59 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 53
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 18 | 2026-05-08 08:26:15 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 53
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 19 | 2026-05-08 08:31:51 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 53
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 20 | 2026-05-08 08:37:06 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 53
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 21 | 2026-05-08 08:42:20 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 53
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 22 | 2026-05-08 08:47:28 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 53
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 23 | 2026-05-08 08:52:38 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 0 artikel baru dikirim (total parsed: 49)
+  [FLUSH] Total artikel baru cycle ini: 0
+  [SNAPSHOT] live_rss.json updated -- 49 artikel diproses, total 53
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 24 | 2026-05-08 08:57:50 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 1 artikel baru dikirim (total parsed: 49)
+  [FLUSH] Total artikel baru cycle ini: 1
+  [SNAPSHOT] live_rss.json updated -- 49 artikel diproses, total 54
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 25 | 2026-05-08 09:02:58 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)
+  [RSS] Tempo      → 1 artikel baru dikirim (total parsed: 50)
+  [FLUSH] Total artikel baru cycle ini: 1
+  [SNAPSHOT] live_rss.json updated -- 50 artikel diproses, total 55
+  [SLEEP] Menunggu 5 menit...
+
+--- Cycle 26 | 2026-05-08 09:08:12 ---
+  [RSS] Kompas     → 0 artikel baru dikirim (total parsed: 0)

@@ -206,7 +206,7 @@ Buka `http://localhost:5000`.
 
 ### 6. Update analisis otomatis tiap 2 menit
 
-Jalankan cron installer berikut supaya `spark_results.json` di-refresh setiap dua menit:
+Jalankan cron installer berikut supaya `spark_results.json` di-refresh setiap dua menit. Cron akan memanggil `scripts/run_analysis.py` satu kali di setiap jadwal, jadi tidak perlu flag tambahan:
 
 ```bash
 chmod +x scripts/*.sh

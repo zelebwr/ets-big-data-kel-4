@@ -1,0 +1,648 @@
+============================================================
+  NewsPulse -- Producer API (GNews)
+============================================================
+  Broker  : localhost:9092
+  Topic   : news-api
+  Interval: 60 detik
+  API     : GNews (top headlines Indonesia)
+============================================================
+
+[INIT] Berhasil terhubung ke Kafka broker.
+
+--- Cycle 1 | 2026-05-08 06:57:26 ---
+  [SENT] detikNews       | Sopir dan Kernet Truk BBM yang Tewas Ditabrak Bus ALS Keraba...
+  [SENT] detiksport      | Ngeri! Ini Kronologi Ribut-ribut Valverde dan Tchouameni di ...
+  [SENT] detikNews       | Selat Hormuz Memanas, Iran Bilang Kapal Tankernya Diserang T...
+  [SENT] detikNews       | Pendiri Ponpes di Pati Tersangka Perkosa Santri Terancam 15 ...
+  [SENT] SUARANTB.com    | Masyarakat Diimbau Waspada Ancaman Wabah Hantavirus...
+  [SENT] Desakarangbendo.id | Bocoran Fitur Terbaru One UI 9 di Android 16 yang Mulai Diuj...
+  [SENT] detikNews       | Eks Pegawai Ungkap Pendiri Ponpes di Pati Sering Bawa Santri...
+  [SENT] ANTARA News     | WHO: Hantavirus di kapal pesiar diperkirakan tak picu epidem...
+  [SENT] detikNews       | Identitas 16 Korban Tewas Kecelakaan Bus ALS yang Terbakar d...
+  [SENT] detiksport      | Ya Ampun! Ribut dengan Tchouameni, Valverde Dilarikan ke RS...
+  [FLUSH] 10 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 2 | 2026-05-08 06:58:30 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 3 | 2026-05-08 06:59:34 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 4 | 2026-05-08 07:00:38 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 5 | 2026-05-08 07:01:41 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 6 | 2026-05-08 07:02:45 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 7 | 2026-05-08 07:03:49 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 8 | 2026-05-08 07:04:52 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 9 | 2026-05-08 07:05:56 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 10 | 2026-05-08 07:07:00 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 11 | 2026-05-08 07:08:04 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 12 | 2026-05-08 07:09:09 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 13 | 2026-05-08 07:10:13 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 14 | 2026-05-08 07:11:16 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 15 | 2026-05-08 07:12:20 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 16 | 2026-05-08 07:13:24 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 17 | 2026-05-08 07:14:28 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 18 | 2026-05-08 07:15:31 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 19 | 2026-05-08 07:16:35 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 20 | 2026-05-08 07:17:39 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 21 | 2026-05-08 07:18:41 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 22 | 2026-05-08 07:19:45 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 23 | 2026-05-08 07:20:48 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 24 | 2026-05-08 07:21:52 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 25 | 2026-05-08 07:22:56 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 26 | 2026-05-08 07:23:59 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 27 | 2026-05-08 07:25:02 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 28 | 2026-05-08 07:26:06 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 29 | 2026-05-08 07:27:10 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 30 | 2026-05-08 07:28:14 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 31 | 2026-05-08 07:29:17 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 32 | 2026-05-08 07:30:19 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 33 | 2026-05-08 07:31:23 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 34 | 2026-05-08 07:32:26 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 35 | 2026-05-08 07:33:30 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 36 | 2026-05-08 07:34:34 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 37 | 2026-05-08 07:35:36 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 38 | 2026-05-08 07:36:40 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 39 | 2026-05-08 07:37:43 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 40 | 2026-05-08 07:38:47 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 41 | 2026-05-08 07:39:51 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 42 | 2026-05-08 07:40:55 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 43 | 2026-05-08 07:41:58 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 44 | 2026-05-08 07:43:02 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 45 | 2026-05-08 07:44:06 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 46 | 2026-05-08 07:45:11 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 47 | 2026-05-08 07:46:15 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 48 | 2026-05-08 07:47:17 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 49 | 2026-05-08 07:48:22 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 50 | 2026-05-08 07:49:26 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 51 | 2026-05-08 07:50:30 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 52 | 2026-05-08 07:51:35 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 53 | 2026-05-08 07:52:40 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 10
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 54 | 2026-05-08 07:53:43 ---
+  [SENT] ANTARA News Bali | WHO: Hantavirus di kapal pesiar diperkirakan tak picu epidem...
+  [SENT] detikNews       | Zelensky Wanti-wanti Sekutu Rusia Tak Hadiri Parade Hari Kem...
+  [SENT] detiksport      | Persija Vs Persib: Awas Kartu Merah Lagi, Macan Kemayoran!...
+  [SENT] Goal.com        | VIDEO: Pangeran William yang bersemangat meluapkan kegembira...
+  [FLUSH] 4 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 55 | 2026-05-08 07:54:48 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 56 | 2026-05-08 07:55:52 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 57 | 2026-05-08 07:56:56 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 58 | 2026-05-08 07:57:59 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 59 | 2026-05-08 07:59:03 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 60 | 2026-05-08 08:00:07 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 61 | 2026-05-08 08:01:11 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 62 | 2026-05-08 08:02:14 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 63 | 2026-05-08 08:03:18 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 64 | 2026-05-08 08:04:21 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 65 | 2026-05-08 08:05:24 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 66 | 2026-05-08 08:06:28 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 67 | 2026-05-08 08:07:32 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 68 | 2026-05-08 08:08:36 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 69 | 2026-05-08 08:09:39 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 70 | 2026-05-08 08:10:43 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 71 | 2026-05-08 08:11:47 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 72 | 2026-05-08 08:12:50 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 73 | 2026-05-08 08:13:55 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 74 | 2026-05-08 08:14:59 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 75 | 2026-05-08 08:16:04 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 76 | 2026-05-08 08:17:07 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 77 | 2026-05-08 08:18:12 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 78 | 2026-05-08 08:19:16 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 79 | 2026-05-08 08:20:20 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 80 | 2026-05-08 08:21:25 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 81 | 2026-05-08 08:22:29 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 14
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 82 | 2026-05-08 08:23:34 ---
+  [SENT] detikNews       | AS Hancurkan Kapal Iran di Selat Hormuz, Trump Ancam Serang ...
+  [SENT] Goal.com        | VIDEO: Cristiano Ronaldo mencetak gol ke-100 di Liga Pro Ara...
+  [FLUSH] 2 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 83 | 2026-05-08 08:24:39 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 84 | 2026-05-08 08:25:42 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 85 | 2026-05-08 08:26:47 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 86 | 2026-05-08 08:27:51 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 87 | 2026-05-08 08:28:57 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 88 | 2026-05-08 08:30:01 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 89 | 2026-05-08 08:31:06 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 90 | 2026-05-08 08:32:09 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 91 | 2026-05-08 08:33:13 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 92 | 2026-05-08 08:34:18 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 93 | 2026-05-08 08:35:23 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 94 | 2026-05-08 08:36:28 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 95 | 2026-05-08 08:37:31 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 96 | 2026-05-08 08:38:35 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 97 | 2026-05-08 08:39:40 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 98 | 2026-05-08 08:40:43 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 99 | 2026-05-08 08:41:49 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 100 | 2026-05-08 08:42:52 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 101 | 2026-05-08 08:43:53 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 102 | 2026-05-08 08:44:56 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 103 | 2026-05-08 08:45:59 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 104 | 2026-05-08 08:47:02 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 105 | 2026-05-08 08:48:05 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 106 | 2026-05-08 08:49:07 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 107 | 2026-05-08 08:50:11 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 108 | 2026-05-08 08:51:13 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 109 | 2026-05-08 08:52:17 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 110 | 2026-05-08 08:53:21 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 16
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 111 | 2026-05-08 08:54:24 ---
+  [SENT] Prohealth.id    | Respons WHO atas Klaster Hantavirus Kapal Pesiar Berbendera ...
+  [SENT] Harian Banyuasin | Mengapa Bintang Bisa Bersinar? Ini Penjelasan Sainsnya...
+  [SENT] detikHealth     | Hasil Investigasi Kematian Dokter Internship, Beban berlebih...
+  [SENT] CNBC Indonesia  | Breaking: Trump Ngamuk! AS-Iran Saling Serang di Selat Hormu...
+  [SENT] Kompas.com      | Rupiah Melemah, Tekanan Ekonomi ke Masyarakat Menguat...
+  [FLUSH] 5 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 112 | 2026-05-08 08:55:27 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 113 | 2026-05-08 08:56:31 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 114 | 2026-05-08 08:57:34 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 115 | 2026-05-08 08:58:37 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 116 | 2026-05-08 08:59:41 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 117 | 2026-05-08 09:00:43 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 118 | 2026-05-08 09:01:47 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 119 | 2026-05-08 09:02:51 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 120 | 2026-05-08 09:03:55 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 121 | 2026-05-08 09:04:59 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 122 | 2026-05-08 09:06:03 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 123 | 2026-05-08 09:07:08 ---
+  [FLUSH] 0 berita baru dikirim ke Kafka
+  [SNAPSHOT] live_api.json diperbarui -- 10 berita diproses, total 21
+  [SLEEP] Menunggu 60 detik...
+
+--- Cycle 124 | 2026-05-08 09:08:12 ---

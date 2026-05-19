@@ -12,7 +12,7 @@ fi
 mkdir -p "$ROOT_DIR/logs"
 
 MARKER="# newspulse-run-analysis"
-LINE="*/2 * * * * cd \"$ROOT_DIR\" && \"$PYTHON_BIN\" scripts/run_analysis.py --once >> \"$ROOT_DIR/logs/cron_analysis.log\" 2>&1 $MARKER"
+LINE="*/2 * * * * cd \"$ROOT_DIR\" && \"$PYTHON_BIN\" scripts/run_analysis.py >> \"$ROOT_DIR/logs/cron_analysis.log\" 2>&1 $MARKER"
 
 TMP_FILE="$(mktemp)"
 trap 'rm -f "$TMP_FILE"' EXIT

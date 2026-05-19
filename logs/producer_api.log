@@ -1,0 +1,32 @@
+============================================================
+  NewsPulse -- Producer API (GNews)
+============================================================
+  Broker  : localhost:9092
+  Topic   : news-api
+  Interval: 60 detik
+  API     : GNews (top headlines Indonesia)
+============================================================
+
+Traceback (most recent call last):
+  File "/mnt/d/Github/ets-big-data-kel-4/kafka/producer_api.py", line 174, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/d/Github/ets-big-data-kel-4/kafka/producer_api.py", line 131, in main
+    producer = create_producer()
+  File "/mnt/d/Github/ets-big-data-kel-4/kafka/producer_api.py", line 32, in create_producer
+    return KafkaProducer(
+        bootstrap_servers=KAFKA_BROKER,
+    ...<4 lines>...
+        retries=5,
+    )
+  File "/mnt/d/Github/ets-big-data-kel-4/.venv/lib/python3.13/site-packages/kafka/producer/kafka.py", line 485, in __init__
+    client = self.config['kafka_client'](
+        metrics=self._metrics, metric_group_prefix='producer',
+        wakeup_timeout_ms=self.config['max_block_ms'],
+        **self.config)
+  File "/mnt/d/Github/ets-big-data-kel-4/.venv/lib/python3.13/site-packages/kafka/client_async.py", line 262, in __init__
+    self.config['api_version'] = self.check_version()
+                                 ~~~~~~~~~~~~~~~~~~^^
+  File "/mnt/d/Github/ets-big-data-kel-4/.venv/lib/python3.13/site-packages/kafka/client_async.py", line 1076, in check_version
+    raise Errors.NoBrokersAvailable()
+kafka.errors.NoBrokersAvailable: NoBrokersAvailable
