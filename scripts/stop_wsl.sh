@@ -21,6 +21,7 @@ stop_by_pid_file logs/producer_api.pid
 stop_by_pid_file logs/producer_rss.pid
 stop_by_pid_file logs/consumer_to_hdfs.pid
 stop_by_pid_file logs/spark_analysis.pid
+stop_by_pid_file logs/lakehouse_continuous.pid
 stop_by_pid_file logs/dashboard.pid
 
 echo "[STEP] Menghentikan container Kafka/Hadoop"

@@ -41,6 +41,7 @@ except ImportError:
 ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_BRONZE_PATH = os.path.join(ROOT_DIR, "lakehouse_data", "bronze", "news")
 DEFAULT_SILVER_OUTPUT = os.path.join(ROOT_DIR, "lakehouse_data", "silver", "news")
+DEFAULT_SPARK_MASTER = os.getenv("NEWS_SPARK_MASTER", "local[1]")
 
 # Timestamp parsing patterns (from original spark_analysis.py)
 TIMESTAMP_PATTERNS = [
@@ -57,16 +58,14 @@ def build_spark_session() -> SparkSession:
     """Initialize Spark session with Delta Lake support."""
     try:
         builder = SparkSession.builder.appName("Silver-NewsPulse") \
+            .master(DEFAULT_SPARK_MASTER) \
             .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
             .config("spark.sql.catalog.spark_catalog", 
                     "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
             .config("spark.sql.legacy.timeParserPolicy", "LEGACY") \
             .config("spark.sql.ansi.enabled", "false")
         
-        spark = configure_spark_with_delta_pip(
-            builder,
-            extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
-        ).getOrCreate()
+        spark = configure_spark_with_delta_pip(builder).getOrCreate()
         
         return spark
     except Exception as e:

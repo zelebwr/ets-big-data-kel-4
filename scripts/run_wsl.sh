@@ -37,9 +37,9 @@ echo "[STEP] Menjalankan consumer ke HDFS"
 nohup python kafka/consumer_to_hdfs.py > logs/consumer_to_hdfs.log 2>&1 &
 PID_CONSUMER=$!
 
-echo "[STEP] Menjalankan analisis Spark berkala"
-nohup python scripts/run_analysis.py --watch --interval 120 > logs/spark_analysis.log 2>&1 &
-PID_SPARK=$!
+echo "[STEP] Menjalankan Lakehouse Bronze→Silver→Gold kontinu"
+nohup python scripts/run_lakehouse_continuous.py --use-local --hdfs-base ./local_input --interval 120 > logs/lakehouse_continuous.log 2>&1 &
+PID_LAKEHOUSE=$!
 
 echo "[STEP] Menjalankan dashboard Flask"
 nohup python dashboard/app.py > logs/dashboard.log 2>&1 &
@@ -48,10 +48,10 @@ PID_DASHBOARD=$!
 echo "$PID_API" > logs/producer_api.pid
 echo "$PID_RSS" > logs/producer_rss.pid
 echo "$PID_CONSUMER" > logs/consumer_to_hdfs.pid
-echo "$PID_SPARK" > logs/spark_analysis.pid
+echo "$PID_LAKEHOUSE" > logs/lakehouse_continuous.pid
 echo "$PID_DASHBOARD" > logs/dashboard.pid
 
 echo "[DONE] Semua proses jalan di background."
 echo "       Dashboard: http://localhost:5000"
-echo "       Spark log: tail -f logs/spark_analysis.log"
+echo "       Lakehouse log: tail -f logs/lakehouse_continuous.log"
 echo "       Cek log   : tail -f logs/dashboard.log"

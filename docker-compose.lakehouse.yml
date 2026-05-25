@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  newspulse:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: newspulse:latest
+    container_name: newspulse_runner
+    volumes:
+      - ./:/app:rw
+      - ./logs:/app/logs:rw
+      - ./lakehouse/lakehouse_data:/app/lakehouse/lakehouse_data:rw
+      - ./dashboard/data:/app/dashboard/data:rw
+    environment:
+      - PYTHONUNBUFFERED=1
+      - NEWS_HDFS_BASE=./local_input
+    command: ["/bin/bash","-c","python3 scripts/run_lakehouse_continuous.py --use-local --hdfs-base ./local_input --interval 120"]
+    restart: unless-stopped
+
+  newspulse_dashboard:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: newspulse:latest
+    container_name: newspulse_dashboard
+    depends_on:
+      - newspulse
+    volumes:
+      - ./:/app:rw
+      - ./dashboard/data:/app/dashboard/data:rw
+      - ./logs:/app/logs:rw
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    command: ["/bin/bash","-c","python3 dashboard/app.py"]
+    restart: unless-stopped

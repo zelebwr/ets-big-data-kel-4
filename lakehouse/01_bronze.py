@@ -17,7 +17,7 @@ import sys
 from datetime import datetime
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import current_timestamp, lit, col
+from pyspark.sql.functions import current_timestamp, lit
 from pyspark.sql.types import StringType, StructField, StructType
 
 try:
@@ -31,6 +31,7 @@ except ImportError:
 ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_BRONZE_OUTPUT = os.path.join(ROOT_DIR, "lakehouse_data", "bronze", "news")
 DEFAULT_HDFS_BASE = os.getenv("NEWS_HDFS_BASE", "hdfs://localhost:8020/data/news")
+DEFAULT_SPARK_MASTER = os.getenv("NEWS_SPARK_MASTER", "local[1]")
 
 # Schema definition (same as ETS)
 NEWS_SCHEMA = StructType(
@@ -47,21 +48,25 @@ NEWS_SCHEMA = StructType(
 )
 
 
-def build_spark_session() -> SparkSession:
-    """Initialize Spark session with Delta Lake support and HDFS."""
+def build_spark_session(use_local: bool = False, hdfs_base: str = DEFAULT_HDFS_BASE) -> SparkSession:
+    """Initialize Spark session with Delta Lake support.
+
+    In local mode we avoid forcing an HDFS defaultFS so file paths are resolved
+    to the local filesystem instead of hdfs://localhost:8020.
+    """
     try:
         builder = SparkSession.builder.appName("Bronze-NewsPulse") \
+            .master(DEFAULT_SPARK_MASTER) \
             .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
             .config("spark.sql.catalog.spark_catalog", 
                     "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
-            .config("spark.hadoop.fs.defaultFS", DEFAULT_HDFS_BASE.split("/data/news")[0]) \
             .config("spark.sql.legacy.timeParserPolicy", "LEGACY") \
             .config("spark.sql.ansi.enabled", "false")
+
+        if not use_local:
+            builder = builder.config("spark.hadoop.fs.defaultFS", hdfs_base.split("/data/news")[0])
         
-        spark = configure_spark_with_delta_pip(
-            builder, 
-            extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
-        ).getOrCreate()
+        spark = configure_spark_with_delta_pip(builder).getOrCreate()
         
         return spark
     except Exception as e:
@@ -202,7 +207,7 @@ def main():
     args = parser.parse_args()
     
     # Build Spark session
-    spark = build_spark_session()
+    spark = build_spark_session(use_local=args.use_local, hdfs_base=args.hdfs_base)
     spark.sparkContext.setLogLevel(args.log_level)
     
     print(f"\n[SPARK] PySpark version: {spark.version}")

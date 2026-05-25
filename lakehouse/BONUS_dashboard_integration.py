@@ -36,10 +36,7 @@ def build_spark_session() -> SparkSession:
             .config("spark.sql.catalog.spark_catalog",
                     "org.apache.spark.sql.delta.catalog.DeltaCatalog")
         
-        spark = configure_spark_with_delta_pip(
-            builder,
-            extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
-        ).getOrCreate()
+        spark = configure_spark_with_delta_pip(builder).getOrCreate()
         
         return spark
     except Exception as e:

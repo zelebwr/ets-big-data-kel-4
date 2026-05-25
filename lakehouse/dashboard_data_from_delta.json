@@ -1,0 +1,258 @@
+{
+  "generated_at": "2026-05-25T09:11:32.055526Z",
+  "source": "Delta Lake Gold Layer",
+  "kata_trending": [
+    {
+      "kata": "2026",
+      "frekuensi": 8
+    },
+    {
+      "kata": "dokter",
+      "frekuensi": 7
+    },
+    {
+      "kata": "sekolah",
+      "frekuensi": 7
+    },
+    {
+      "kata": "kapal",
+      "frekuensi": 5
+    },
+    {
+      "kata": "magang",
+      "frekuensi": 5
+    },
+    {
+      "kata": "pemerintah",
+      "frekuensi": 5
+    },
+    {
+      "kata": "prabowo",
+      "frekuensi": 5
+    },
+    {
+      "kata": "rakyat",
+      "frekuensi": 5
+    },
+    {
+      "kata": "hantavirus",
+      "frekuensi": 4
+    },
+    {
+      "kata": "kemenkes",
+      "frekuensi": 4
+    },
+    {
+      "kata": "besar",
+      "frekuensi": 3
+    },
+    {
+      "kata": "hadiri",
+      "frekuensi": 3
+    },
+    {
+      "kata": "hormuz",
+      "frekuensi": 3
+    },
+    {
+      "kata": "iran",
+      "frekuensi": 3
+    },
+    {
+      "kata": "kematian",
+      "frekuensi": 3
+    }
+  ],
+  "distribusi_sumber": [
+    {
+      "sumber": "Tempo",
+      "jumlah": 55
+    },
+    {
+      "sumber": "detikNews",
+      "jumlah": 7
+    },
+    {
+      "sumber": "detiksport",
+      "jumlah": 3
+    },
+    {
+      "sumber": "CNBC Indonesia",
+      "jumlah": 2
+    },
+    {
+      "sumber": "Goal.com",
+      "jumlah": 2
+    },
+    {
+      "sumber": "ANTARA News",
+      "jumlah": 1
+    },
+    {
+      "sumber": "ANTARA News Bali",
+      "jumlah": 1
+    },
+    {
+      "sumber": "Desakarangbendo.id",
+      "jumlah": 1
+    },
+    {
+      "sumber": "Harian Banyuasin",
+      "jumlah": 1
+    },
+    {
+      "sumber": "Kompas.com",
+      "jumlah": 1
+    },
+    {
+      "sumber": "Prohealth.id",
+      "jumlah": 1
+    },
+    {
+      "sumber": "SUARANTB.com",
+      "jumlah": 1
+    },
+    {
+      "sumber": "detikFinance",
+      "jumlah": 1
+    },
+    {
+      "sumber": "detikHealth",
+      "jumlah": 1
+    }
+  ],
+  "live_news": [],
+  "cross_source_analysis": [
+    {
+      "topik": "2026",
+      "api_count": 1,
+      "rss_count": 7,
+      "co_occurrence_ratio": 1.1428571428571428
+    },
+    {
+      "topik": "dokter",
+      "api_count": 1,
+      "rss_count": 6,
+      "co_occurrence_ratio": 1.1666666666666667
+    },
+    {
+      "topik": "prabowo",
+      "api_count": 1,
+      "rss_count": 4,
+      "co_occurrence_ratio": 1.25
+    },
+    {
+      "topik": "hadiri",
+      "api_count": 1,
+      "rss_count": 2,
+      "co_occurrence_ratio": 1.5
+    },
+    {
+      "topik": "kematian",
+      "api_count": 1,
+      "rss_count": 2,
+      "co_occurrence_ratio": 1.5
+    },
+    {
+      "topik": "masyarakat",
+      "api_count": 2,
+      "rss_count": 1,
+      "co_occurrence_ratio": 1.5
+    },
+    {
+      "topik": "pati",
+      "api_count": 2,
+      "rss_count": 1,
+      "co_occurrence_ratio": 1.5
+    },
+    {
+      "topik": "picu",
+      "api_count": 2,
+      "rss_count": 1,
+      "co_occurrence_ratio": 1.5
+    },
+    {
+      "topik": "ponpes",
+      "api_count": 2,
+      "rss_count": 1,
+      "co_occurrence_ratio": 1.5
+    },
+    {
+      "topik": "program",
+      "api_count": 1,
+      "rss_count": 2,
+      "co_occurrence_ratio": 1.5
+    },
+    {
+      "topik": "15",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "beban",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "bisa",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "daftar",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "gelar",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "hasil",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "investigasi",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "juara",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "korban",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "manipulasi",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    }
+  ],
+  "metadata": {
+    "total_sources": 14,
+    "total_trending_words": 15,
+    "total_cross_topics": 20,
+    "pipeline": "Delta Lake Lakehouse (Bronze → Silver → Gold)",
+    "data_quality": {
+      "deduplication": "Applied (url-based)",
+      "timestamp_parsing": "100%",
+      "null_handling": "Applied (sumber='Unknown')"
+    }
+  }
+}

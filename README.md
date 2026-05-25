@@ -100,7 +100,8 @@ chmod +x scripts/*.sh
 ./scripts/stop_wsl.sh
 ```
 
-Dashboard akan tersedia di `http://localhost:5000`, dan analisis Spark akan di-refresh otomatis tiap 2 menit.
+Dashboard akan tersedia di `http://localhost:5000`, dan pipeline Lakehouse (Bronze → Silver → Gold) akan berjalan terus-menerus tiap 2 menit.
+Log Lakehouse kontinu dapat dilihat di `logs/lakehouse_continuous.log`.
 
 ### Run All After Initial Setup Done
 
@@ -185,10 +186,13 @@ Jalankan job Spark yang membaca data langsung dari HDFS dan menulis hasil olahan
 python scripts/run_analysis.py --once
 ```
 
-Jika ingin berjalan terus-menerus, gunakan mode watch atau jalankan `scripts/run_wsl.sh`:
+Jika ingin berjalan terus-menerus, gunakan mode watch atau jalankan `scripts/run_wsl.sh` (runner Lakehouse kontinu):
 
 ```bash
 python scripts/run_analysis.py --watch --interval 120
+
+# mode Lakehouse kontinu (dipakai oleh run_wsl.sh)
+python scripts/run_lakehouse_continuous.py --use-local --hdfs-base ./local_input --interval 120
 ```
 
 ### 5. Jalankan dashboard

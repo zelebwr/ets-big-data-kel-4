@@ -15,7 +15,7 @@ import sys
 from datetime import datetime
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, lit, to_timestamp
+from pyspark.sql.functions import col, length, when
 
 try:
     from delta import configure_spark_with_delta_pip
@@ -32,10 +32,7 @@ def build_spark_session() -> SparkSession:
             .config("spark.sql.catalog.spark_catalog",
                     "org.apache.spark.sql.delta.catalog.DeltaCatalog")
         
-        spark = configure_spark_with_delta_pip(
-            builder,
-            extra_packages=["io.delta:delta-spark_2.12:3.1.0"]
-        ).getOrCreate()
+        spark = configure_spark_with_delta_pip(builder).getOrCreate()
         
         return spark
     except Exception as e:
@@ -90,23 +87,7 @@ def demo_schema_evolution():
         print("  - news_age_hours: hours since terbit")
         
         enriched = silver \
-            .withColumn("content_length", 
-                       col("deskripsi").cast("string").then(
-                           lambda x: len(x) if x else 0
-                       )) \
-            .withColumn("has_image", 
-                       col("image").isNotNull().cast("boolean")) \
-            .withColumn("has_thumbnail",
-                       col("thumbnail").isNotNull().cast("boolean")) \
-            .withColumn("source_channel",
-                       when(col("_source") == "api", "News API")
-                       .when(col("_source") == "rss", "RSS Feed")
-                       .otherwise("Unknown"))
-        
-        # Alternative simpler approach using when
-        from pyspark.sql.functions import when
-        enriched = silver \
-            .withColumn("content_length", len(col("deskripsi"))) \
+            .withColumn("content_length", length(col("deskripsi"))) \
             .withColumn("has_image", when(col("image").isNotNull(), True).otherwise(False)) \
             .withColumn("has_thumbnail", when(col("thumbnail").isNotNull(), True).otherwise(False)) \
             .withColumn("source_channel",
