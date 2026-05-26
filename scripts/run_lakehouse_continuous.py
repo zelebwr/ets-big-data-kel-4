@@ -7,6 +7,7 @@ import json
 import subprocess
 import sys
 import time
+import shutil
 from datetime import datetime
 from pathlib import Path
 
@@ -19,6 +20,7 @@ DASHBOARD_SPARK_JSON = DASHBOARD_DIR / "spark_results.json"
 LIVE_API_JSON = DASHBOARD_DIR / "live_api.json"
 LIVE_RSS_JSON = DASHBOARD_DIR / "live_rss.json"
 PIPELINE_STATUS_JSON = DASHBOARD_DIR / "pipeline_status.json"
+GOLD_OUTPUT_DIR = LAKEHOUSE_DIR / "lakehouse_data" / "gold"
 
 
 def load_json(path: Path, default):
@@ -42,6 +44,9 @@ def build_dashboard_snapshot_from_lakehouse() -> dict:
     if not isinstance(volume_per_jam, list) or len(volume_per_jam) == 0:
         volume_per_jam = [{"jam": hour_index, "jumlah_berita": 0} for hour_index in range(24)]
 
+    total_api = len(live_api)
+    total_rss = len(live_rss)
+
     return {
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "source": "lakehouse_continuous_runner",
@@ -49,8 +54,8 @@ def build_dashboard_snapshot_from_lakehouse() -> dict:
         "distribusi_sumber": distribusi_sumber,
         "volume_per_jam": volume_per_jam,
         "live_news": [],
-        "total_api": len(live_api),
-        "total_rss": len(live_rss),
+        "total_api": int(total_api) if total_api is not None else 0,
+        "total_rss": int(total_rss) if total_rss is not None else 0,
     }
 
 
@@ -83,6 +88,12 @@ def run_one_cycle(use_local: bool, hdfs_base: str, log_level: str) -> None:
     bronze_output = "./lakehouse_data/bronze/news"
     silver_output = "./lakehouse_data/silver/news"
     gold_output = "./lakehouse_data/gold"
+
+    # Clean Gold output directory to avoid schema conflicts
+    gold_output_path = LAKEHOUSE_DIR / "lakehouse_data" / "gold"
+    if gold_output_path.exists():
+        print(f"[LAKEHOUSE] Cleaning Gold output directory: {gold_output_path}")
+        shutil.rmtree(gold_output_path)
 
     bronze_cmd = [
         sys.executable,
@@ -142,7 +153,7 @@ def parse_args():
     )
     parser.add_argument(
         "--hdfs-base",
-        default="./local_input",
+        default="hdfs://localhost:8020/data/news",
         help="Base path input Bronze (HDFS atau local path)",
     )
     parser.add_argument(

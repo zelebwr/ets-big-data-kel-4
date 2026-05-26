@@ -20,12 +20,65 @@ import sys
 from datetime import datetime
 
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
 
 try:
     from delta import configure_spark_with_delta_pip
 except ImportError:
     print("ERROR: delta-spark not installed. Run: pip install delta-spark")
     sys.exit(1)
+
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DASHBOARD_DATA_DIR = os.path.join(ROOT_DIR, "dashboard", "data")
+LIVE_API_JSON = os.path.join(DASHBOARD_DATA_DIR, "live_api.json")
+LIVE_RSS_JSON = os.path.join(DASHBOARD_DATA_DIR, "live_rss.json")
+
+
+def save_json(output_path: str, payload) -> None:
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, ensure_ascii=False, indent=2)
+
+
+def rows_to_records(frame, columns: list[str]) -> list[dict]:
+    available_columns = [column_name for column_name in columns if column_name in frame.columns]
+    if not available_columns:
+        return []
+    return [
+        {column_name: row[column_name] for column_name in available_columns if row[column_name] is not None}
+        for row in frame.select(*available_columns).collect()
+    ]
+
+
+def write_live_snapshots(silver_news) -> tuple[int, int]:
+    """Persist cumulative live snapshot files from Silver data.
+
+    The existing dashboard still reads dashboard/data/live_api.json and
+    dashboard/data/live_rss.json, so we refresh those files here from the
+    Lakehouse layer instead of relying on Kafka consumer mirrors.
+    """
+
+    base_columns = [
+        "judul",
+        "sumber",
+        "url",
+        "kategori",
+        "deskripsi",
+        "image",
+        "thumbnail",
+        "waktu_terbit",
+        "timestamp",
+    ]
+
+    api_records = rows_to_records(silver_news.filter(col("_source") == "api"), base_columns)
+    rss_records = rows_to_records(silver_news.filter(col("_source") == "rss"), base_columns)
+
+    save_json(LIVE_API_JSON, api_records)
+    save_json(LIVE_RSS_JSON, rss_records)
+
+    print(f"[DASHBOARD] Refreshed live snapshots: {len(api_records)} API, {len(rss_records)} RSS")
+    return len(api_records), len(rss_records)
 
 
 def build_spark_session() -> SparkSession:
@@ -59,6 +112,7 @@ def generate_dashboard_payload(spark: SparkSession, gold_path: str) -> dict:
         "source": "Delta Lake Gold Layer",
         "kata_trending": [],
         "distribusi_sumber": [],
+        "volume_per_jam": [],
         "live_news": [],
         "cross_source_analysis": [],
         "metadata": {}
@@ -86,6 +140,40 @@ def generate_dashboard_payload(spark: SparkSession, gold_path: str) -> dict:
                 for row in news_source.collect()
             ]
             print(f"  ✓ Loaded {len(payload['distribusi_sumber'])} news sources")
+
+        # Build hourly publication volume from Silver layer (has column: jam)
+        print("[DASHBOARD] Reading silver/news for volume_per_jam...")
+        silver_news_path = os.path.join(os.path.dirname(gold_path), "silver", "news")
+        if os.path.exists(silver_news_path):
+            silver_news = spark.read.format("delta").load(silver_news_path)
+            hourly_rows = (
+                silver_news
+                .filter("jam IS NOT NULL")
+                .groupBy("jam")
+                .count()
+                .orderBy("jam")
+                .collect()
+            )
+            hourly_lookup = {int(r["jam"]): int(r["count"]) for r in hourly_rows}
+            payload["volume_per_jam"] = [
+                {"jam": hour_index, "jumlah_berita": int(hourly_lookup.get(hour_index, 0))}
+                for hour_index in range(24)
+            ]
+            print("  ✓ Loaded hourly volume from Silver")
+            # Refresh dashboard live snapshots directly from Lakehouse output
+            try:
+                total_api, total_rss = write_live_snapshots(silver_news)
+            except Exception:
+                total_api = None
+                total_rss = None
+            payload["total_api"] = total_api
+            payload["total_rss"] = total_rss
+        else:
+            payload["volume_per_jam"] = [
+                {"jam": hour_index, "jumlah_berita": 0}
+                for hour_index in range(24)
+            ]
+            print("  ! silver/news not found, fallback to zero hourly volume")
         
         # Read cross_source_topics table (ENHANCED)
         print("[DASHBOARD] Reading cross_source_topics (ENHANCED)...")
@@ -106,6 +194,8 @@ def generate_dashboard_payload(spark: SparkSession, gold_path: str) -> dict:
         # Metadata
         payload["metadata"] = {
             "total_sources": len(payload["distribusi_sumber"]),
+            "total_api": payload.get("total_api"),
+            "total_rss": payload.get("total_rss"),
             "total_trending_words": len(payload["kata_trending"]),
             "total_cross_topics": len(payload["cross_source_analysis"]),
             "pipeline": "Delta Lake Lakehouse (Bronze → Silver → Gold)",

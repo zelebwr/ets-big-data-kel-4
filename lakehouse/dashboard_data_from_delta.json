@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-25T09:11:32.055526Z",
+  "generated_at": "2026-05-26T15:27:14.838674Z",
   "source": "Delta Lake Gold Layer",
   "kata_trending": [
     {
@@ -43,10 +43,6 @@
       "frekuensi": 4
     },
     {
-      "kata": "besar",
-      "frekuensi": 3
-    },
-    {
       "kata": "hadiri",
       "frekuensi": 3
     },
@@ -60,6 +56,10 @@
     },
     {
       "kata": "kematian",
+      "frekuensi": 3
+    },
+    {
+      "kata": "kepala",
       "frekuensi": 3
     }
   ],
@@ -119,6 +119,104 @@
     {
       "sumber": "detikHealth",
       "jumlah": 1
+    }
+  ],
+  "volume_per_jam": [
+    {
+      "jam": 0,
+      "jumlah_berita": 1
+    },
+    {
+      "jam": 1,
+      "jumlah_berita": 3
+    },
+    {
+      "jam": 2,
+      "jumlah_berita": 1
+    },
+    {
+      "jam": 3,
+      "jumlah_berita": 0
+    },
+    {
+      "jam": 4,
+      "jumlah_berita": 3
+    },
+    {
+      "jam": 5,
+      "jumlah_berita": 4
+    },
+    {
+      "jam": 6,
+      "jumlah_berita": 9
+    },
+    {
+      "jam": 7,
+      "jumlah_berita": 4
+    },
+    {
+      "jam": 8,
+      "jumlah_berita": 6
+    },
+    {
+      "jam": 9,
+      "jumlah_berita": 4
+    },
+    {
+      "jam": 10,
+      "jumlah_berita": 3
+    },
+    {
+      "jam": 11,
+      "jumlah_berita": 1
+    },
+    {
+      "jam": 12,
+      "jumlah_berita": 3
+    },
+    {
+      "jam": 13,
+      "jumlah_berita": 5
+    },
+    {
+      "jam": 14,
+      "jumlah_berita": 1
+    },
+    {
+      "jam": 15,
+      "jumlah_berita": 2
+    },
+    {
+      "jam": 16,
+      "jumlah_berita": 3
+    },
+    {
+      "jam": 17,
+      "jumlah_berita": 3
+    },
+    {
+      "jam": 18,
+      "jumlah_berita": 7
+    },
+    {
+      "jam": 19,
+      "jumlah_berita": 3
+    },
+    {
+      "jam": 20,
+      "jumlah_berita": 2
+    },
+    {
+      "jam": 21,
+      "jumlah_berita": 7
+    },
+    {
+      "jam": 22,
+      "jumlah_berita": 2
+    },
+    {
+      "jam": 23,
+      "jumlah_berita": 1
     }
   ],
   "live_news": [],
@@ -196,12 +294,6 @@
       "co_occurrence_ratio": 2.0
     },
     {
-      "topik": "bisa",
-      "api_count": 1,
-      "rss_count": 1,
-      "co_occurrence_ratio": 2.0
-    },
-    {
       "topik": "daftar",
       "api_count": 1,
       "rss_count": 1,
@@ -209,12 +301,6 @@
     },
     {
       "topik": "gelar",
-      "api_count": 1,
-      "rss_count": 1,
-      "co_occurrence_ratio": 2.0
-    },
-    {
-      "topik": "hasil",
       "api_count": 1,
       "rss_count": 1,
       "co_occurrence_ratio": 2.0
@@ -242,10 +328,24 @@
       "api_count": 1,
       "rss_count": 1,
       "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "mobil",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
+    },
+    {
+      "topik": "ungkap",
+      "api_count": 1,
+      "rss_count": 1,
+      "co_occurrence_ratio": 2.0
     }
   ],
   "metadata": {
     "total_sources": 14,
+    "total_api": 23,
+    "total_rss": 55,
     "total_trending_words": 15,
     "total_cross_topics": 20,
     "pipeline": "Delta Lake Lakehouse (Bronze → Silver → Gold)",
@@ -254,5 +354,7 @@
       "timestamp_parsing": "100%",
       "null_handling": "Applied (sumber='Unknown')"
     }
-  }
+  },
+  "total_api": 23,
+  "total_rss": 55
 }

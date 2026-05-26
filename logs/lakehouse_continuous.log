@@ -1,0 +1,795 @@
+/mnt/d/Github/ets-big-data-kel-4/scripts/run_lakehouse_continuous.py:189: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  started = datetime.utcnow().isoformat() + "Z"
+WARNING: Using incubator modules: jdk.incubator.vector
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+26/05/26 22:20:21 WARN Utils: Your hostname, Rii-PC, resolves to a loopback address: 127.0.1.1; using 10.255.255.254 instead (on interface lo)
+26/05/26 22:20:21 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+:: loading settings :: url = jar:file:/mnt/d/Github/ets-big-data-kel-4/.venv/lib/python3.13/site-packages/pyspark/jars/ivy-2.5.3.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /home/fathari/.ivy2.5.2/cache
+The jars for the packages stored in: /home/fathari/.ivy2.5.2/jars
+io.delta#delta-spark_4.1_2.13 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-947b1769-8669-4187-b37a-89da90c55b7d;1.0
+	confs: [default]
+	found io.delta#delta-spark_4.1_2.13;4.2.0 in spark-list
+	found io.delta#delta-storage;4.2.0 in central
+	found io.unitycatalog#unitycatalog-client;0.4.1 in central
+	found org.slf4j#slf4j-api;2.0.13 in central
+	found org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 in central
+	found org.apache.logging.log4j#log4j-api;2.25.3 in central
+	found com.google.code.findbugs#jsr305;3.0.2 in central
+	found org.apache.logging.log4j#log4j-core;2.25.3 in spark-list
+	found io.delta#delta-kernel-api;4.2.0 in central
+	found org.roaringbitmap#RoaringBitmap;0.9.25 in central
+	found com.fasterxml.jackson.core#jackson-databind;2.13.5 in central
+	found com.fasterxml.jackson.core#jackson-annotations;2.13.5 in central
+	found com.fasterxml.jackson.core#jackson-core;2.13.5 in central
+	found com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 in central
+	found org.roaringbitmap#shims;0.9.25 in central
+	found io.delta#delta-kernel-defaults;4.2.0 in central
+	found org.apache.hadoop#hadoop-client-runtime;3.4.2 in central
+	found org.apache.parquet#parquet-hadoop;1.16.0 in central
+	found org.apache.parquet#parquet-column;1.16.0 in central
+	found org.apache.parquet#parquet-common;1.16.0 in central
+	found org.apache.parquet#parquet-format-structures;1.16.0 in central
+	found javax.annotation#javax.annotation-api;1.3.2 in central
+	found org.apache.parquet#parquet-encoding;1.16.0 in central
+	found org.locationtech.jts#jts-core;1.20.0 in central
+	found org.xerial.snappy#snappy-java;1.1.10.7 in central
+	found io.airlift#aircompressor;2.0.2 in central
+	found commons-pool#commons-pool;1.6 in central
+	found com.github.luben#zstd-jni;1.5.7-3 in central
+	found org.apache.hadoop#hadoop-client-api;3.4.2 in central
+	found commons-logging#commons-logging;1.3.0 in central
+	found org.apache.parquet#parquet-jackson;1.16.0 in central
+	found io.delta#delta-kernel-unitycatalog;4.2.0 in central
+:: resolution report :: resolve 3247ms :: artifacts dl 104ms
+	:: modules in use:
+	com.fasterxml.jackson.core#jackson-annotations;2.13.5 from central in [default]
+	com.fasterxml.jackson.core#jackson-core;2.13.5 from central in [default]
+	com.fasterxml.jackson.core#jackson-databind;2.13.5 from central in [default]
+	com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 from central in [default]
+	com.github.luben#zstd-jni;1.5.7-3 from central in [default]
+	com.google.code.findbugs#jsr305;3.0.2 from central in [default]
+	commons-logging#commons-logging;1.3.0 from central in [default]
+	commons-pool#commons-pool;1.6 from central in [default]
+	io.airlift#aircompressor;2.0.2 from central in [default]
+	io.delta#delta-kernel-api;4.2.0 from central in [default]
+	io.delta#delta-kernel-defaults;4.2.0 from central in [default]
+	io.delta#delta-kernel-unitycatalog;4.2.0 from central in [default]
+	io.delta#delta-spark_4.1_2.13;4.2.0 from spark-list in [default]
+	io.delta#delta-storage;4.2.0 from central in [default]
+	io.unitycatalog#unitycatalog-client;0.4.1 from central in [default]
+	javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+	org.apache.hadoop#hadoop-client-api;3.4.2 from central in [default]
+	org.apache.hadoop#hadoop-client-runtime;3.4.2 from central in [default]
+	org.apache.logging.log4j#log4j-api;2.25.3 from central in [default]
+	org.apache.logging.log4j#log4j-core;2.25.3 from spark-list in [default]
+	org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 from central in [default]
+	org.apache.parquet#parquet-column;1.16.0 from central in [default]
+	org.apache.parquet#parquet-common;1.16.0 from central in [default]
+	org.apache.parquet#parquet-encoding;1.16.0 from central in [default]
+	org.apache.parquet#parquet-format-structures;1.16.0 from central in [default]
+	org.apache.parquet#parquet-hadoop;1.16.0 from central in [default]
+	org.apache.parquet#parquet-jackson;1.16.0 from central in [default]
+	org.locationtech.jts#jts-core;1.20.0 from central in [default]
+	org.roaringbitmap#RoaringBitmap;0.9.25 from central in [default]
+	org.roaringbitmap#shims;0.9.25 from central in [default]
+	org.slf4j#slf4j-api;2.0.13 from central in [default]
+	org.xerial.snappy#snappy-java;1.1.10.7 from central in [default]
+	:: evicted modules:
+	org.slf4j#slf4j-api;2.0.17 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.slf4j#slf4j-api;1.7.36 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.slf4j#slf4j-api;1.7.33 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.xerial.snappy#snappy-java;1.1.10.4 by [org.xerial.snappy#snappy-java;1.1.10.7] in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   36  |   0   |   0   |   4   ||   32  |   0   |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-947b1769-8669-4187-b37a-89da90c55b7d
+	confs: [default]
+	0 artifacts copied, 32 already retrieved (0kB/49ms)
+26/05/26 22:20:28 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+/mnt/d/Github/ets-big-data-kel-4/lakehouse/01_bronze.py:228: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  print(f"[SPARK] Session initialized at {datetime.utcnow().isoformat()}Z\n")
+[Stage 0:>                                                          (0 + 1) / 1]                                                                                [Stage 1:===========================================================(1 + 0) / 1]                                                                                [Stage 17:>                                                         (0 + 1) / 1][Stage 19:>                                                        (0 + 1) / 50][Stage 19:=>                                                       (1 + 1) / 50][Stage 19:==>                                                      (2 + 1) / 50][Stage 19:==>                                                      (2 + 2) / 50][Stage 19:===>                                                     (3 + 1) / 50][Stage 19:====>                                                    (4 + 1) / 50][Stage 19:=====>                                                   (5 + 1) / 50][Stage 19:======>                                                  (6 + 1) / 50][Stage 19:=========>                                               (8 + 1) / 50][Stage 19:==========>                                              (9 + 1) / 50][Stage 19:===========>                                            (10 + 1) / 50][Stage 19:============>                                           (11 + 1) / 50][Stage 19:=============>                                          (12 + 1) / 50][Stage 19:==============>                                         (13 + 1) / 50][Stage 19:===============>                                        (14 + 1) / 50][Stage 19:================>                                       (15 + 1) / 50][Stage 19:=================>                                      (16 + 1) / 50][Stage 19:===================>                                    (17 + 1) / 50][Stage 19:====================>                                   (18 + 1) / 50][Stage 19:=====================>                                  (19 + 1) / 50][Stage 19:======================>                                 (20 + 1) / 50][Stage 19:=======================>                                (21 + 1) / 50][Stage 19:========================>                               (22 + 1) / 50][Stage 19:=========================>                              (23 + 1) / 50][Stage 19:==========================>                             (24 + 1) / 50][Stage 19:============================>                           (25 + 1) / 50][Stage 19:=============================>                          (26 + 1) / 50][Stage 19:==============================>                         (27 + 1) / 50][Stage 19:===============================>                        (28 + 1) / 50][Stage 19:================================>                       (29 + 1) / 50][Stage 19:=================================>                      (30 + 1) / 50][Stage 19:==================================>                     (31 + 1) / 50][Stage 19:===================================>                    (32 + 1) / 50][Stage 19:====================================>                   (33 + 1) / 50][Stage 19:======================================>                 (34 + 1) / 50][Stage 19:=======================================>                (35 + 1) / 50][Stage 19:========================================>               (36 + 1) / 50][Stage 19:=========================================>              (37 + 1) / 50][Stage 19:==========================================>             (38 + 1) / 50][Stage 19:===========================================>            (39 + 1) / 50][Stage 19:============================================>           (40 + 1) / 50][Stage 19:===============================================>        (42 + 1) / 50][Stage 19:================================================>       (43 + 1) / 50][Stage 19:=================================================>      (44 + 1) / 50][Stage 19:===================================================>    (46 + 1) / 50][Stage 19:====================================================>   (47 + 1) / 50][Stage 19:=====================================================>  (48 + 1) / 50][Stage 19:======================================================> (49 + 1) / 50]                                                                                [Stage 23:>                                                         (0 + 1) / 2][Stage 23:=============================>                            (1 + 1) / 2]                                                                                [Stage 25:=========>                                               (8 + 1) / 50][Stage 25:==============>                                         (13 + 2) / 50][Stage 25:====================>                                   (18 + 1) / 50][Stage 25:========================>                               (22 + 1) / 50][Stage 25:==============================>                         (27 + 1) / 50][Stage 25:=======================================>                (35 + 1) / 50][Stage 25:============================================>           (40 + 1) / 50][Stage 25:===================================================>    (46 + 1) / 50]                                                                                [Stage 28:=>                                                       (1 + 1) / 50][Stage 28:==>                                                      (2 + 1) / 50][Stage 28:====>                                                    (4 + 1) / 50][Stage 28:=====>                                                   (5 + 1) / 50][Stage 28:======>                                                  (6 + 1) / 50][Stage 28:=======>                                                 (7 + 1) / 50][Stage 28:==========>                                              (9 + 1) / 50][Stage 28:===========>                                            (10 + 1) / 50][Stage 28:============>                                           (11 + 1) / 50][Stage 28:=============>                                          (12 + 1) / 50][Stage 28:==============>                                         (13 + 1) / 50][Stage 28:===============>                                        (14 + 1) / 50][Stage 28:=================>                                      (16 + 1) / 50][Stage 28:===================>                                    (17 + 1) / 50][Stage 28:====================>                                   (18 + 1) / 50][Stage 28:======================>                                 (20 + 1) / 50][Stage 28:=======================>                                (21 + 1) / 50][Stage 28:=========================>                              (23 + 1) / 50][Stage 28:==========================>                             (24 + 1) / 50][Stage 28:============================>                           (25 + 1) / 50][Stage 28:=============================>                          (26 + 1) / 50][Stage 28:===============================>                        (28 + 1) / 50][Stage 28:================================>                       (29 + 1) / 50][Stage 28:=================================>                      (30 + 1) / 50][Stage 28:===================================>                    (32 + 1) / 50][Stage 28:======================================>                 (34 + 1) / 50][Stage 28:=======================================>                (35 + 1) / 50][Stage 28:=========================================>              (37 + 1) / 50][Stage 28:==========================================>             (38 + 1) / 50][Stage 28:============================================>           (40 + 1) / 50][Stage 28:=============================================>          (41 + 1) / 50][Stage 28:================================================>       (43 + 1) / 50][Stage 28:=================================================>      (44 + 1) / 50][Stage 28:===================================================>    (46 + 1) / 50][Stage 28:====================================================>   (47 + 1) / 50][Stage 28:======================================================> (49 + 1) / 50]                                                                                
+[SPARK] PySpark version: 4.1.1
+[SPARK] Session initialized at 2026-05-26T15:20:50.245374Z
+
+[BRONZE] Starting ingestion...
+[BRONZE] HDFS Base: ./local_input
+[BRONZE] Output: ./lakehouse_data/bronze/news
+[BRONZE] Reading API data...
+[BRONZE] Reading from local path: ./local_input/api
+[BRONZE] Found 23 records in ./local_input/api
+[BRONZE] API records: 23
+[BRONZE] Reading RSS data...
+[BRONZE] Reading from local path: ./local_input/rss
+[BRONZE] Found 55 records in ./local_input/rss
+[BRONZE] RSS records: 55
+[BRONZE] Combining API and RSS data...
+[BRONZE] Total records before write: 78
+[BRONZE] Writing to Delta Lake...
+[DONE] Bronze layer created successfully at ./lakehouse_data/bronze/news
+[DONE] Total records ingested: 78
+
+[BRONZE] Schema:
+root
+ |-- deskripsi: string (nullable = true)
+ |-- image: string (nullable = true)
+ |-- judul: string (nullable = true)
+ |-- kategori: string (nullable = true)
+ |-- sumber: string (nullable = true)
+ |-- thumbnail: string (nullable = true)
+ |-- timestamp: string (nullable = true)
+ |-- url: string (nullable = true)
+ |-- waktu_terbit: string (nullable = true)
+ |-- _ingested_at: timestamp (nullable = false)
+ |-- _source: string (nullable = false)
+
+
+[BRONZE] Sample data (first 3 records):
++--------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+--------+----------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------+--------------------------+-------+
+|deskripsi                                                                                                                                                     |image                                                                                                                                                                                |judul                                                                   |kategori|sumber          |thumbnail                                                                                                                                                                            |timestamp                 |url                                                                                                                   |waktu_terbit        |_ingested_at              |_source|
++--------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+--------+----------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------+--------------------------+-------+
+|Prohealth.id, yang lahir sebagai inisiatif gabungan jurnalis dalam pengendalian zat adiktif dan memperbaiki taraf kesehatan masyarakat.                       |https://prohealth.id/wp-content/uploads/2026/05/MV-Hondius.webp                                                                                                                      |Respons WHO atas Klaster Hantavirus Kapal Pesiar Berbendera Belanda     |nasional|Prohealth.id    |https://prohealth.id/wp-content/uploads/2026/05/MV-Hondius.webp                                                                                                                      |2026-05-08T09:53:46.158421|https://prohealth.id/respons-who-atas-klaster-hantavirus-kapal-pesiar-berbendera-belanda/                             |2026-05-08T01:24:26Z|2026-05-26 22:22:01.801817|api    |
+|Ilmuwan Ungkap Proses Dahsyat yang Membuat Bintang Bersinar                                                                                                   |https://harianbanyuasin.disway.id/upload/f28f5df98882f087a80b1466195783af.jpg                                                                                                        |Mengapa Bintang Bisa Bersinar? Ini Penjelasan Sainsnya                  |nasional|Harian Banyuasin|https://harianbanyuasin.disway.id/upload/f28f5df98882f087a80b1466195783af.jpg                                                                                                        |2026-05-08T09:53:46.158450|https://harianbanyuasin.disway.id/ragam-dunia/read/653323/mengapa-bintang-bisa-bersinar-ini-penjelasan-sainsnya       |2026-05-08T01:00:00Z|2026-05-26 22:22:01.801817|api    |
+|Trump mendesak Iran segera menandatangani perjanjian damai dengan AS. Dia mengancam akan menyerang lebih brutal jika kesepakatan damai tidak kunjung tercapai.|https://awsimages.detik.net.id/api/wm/2026/04/02/presiden-as-donald-trump-saat-berpidato-di-gedung-putih-membahas-perang-melawan-iran-1775096884325_169.jpeg?wid=54&w=1200&v=1&t=jpeg|AS Hancurkan Kapal Iran di Selat Hormuz, Trump Ancam Serang Lebih Brutal|nasional|detikNews       |https://awsimages.detik.net.id/api/wm/2026/04/02/presiden-as-donald-trump-saat-berpidato-di-gedung-putih-membahas-perang-melawan-iran-1775096884325_169.jpeg?wid=54&w=1200&v=1&t=jpeg|2026-05-08T09:53:46.158470|https://news.detik.com/internasional/d-8479587/as-hancurkan-kapal-iran-di-selat-hormuz-trump-ancam-serang-lebih-brutal|2026-05-08T00:10:41Z|2026-05-26 22:22:01.801817|api    |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+--------+----------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------+----------------------------------------------------------------------------------------------------------------------+--------------------+--------------------------+-------+
+
+
+[SPARK] Session stopped
+WARNING: Using incubator modules: jdk.incubator.vector
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+26/05/26 22:22:37 WARN Utils: Your hostname, Rii-PC, resolves to a loopback address: 127.0.1.1; using 10.255.255.254 instead (on interface lo)
+26/05/26 22:22:37 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+:: loading settings :: url = jar:file:/mnt/d/Github/ets-big-data-kel-4/.venv/lib/python3.13/site-packages/pyspark/jars/ivy-2.5.3.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /home/fathari/.ivy2.5.2/cache
+The jars for the packages stored in: /home/fathari/.ivy2.5.2/jars
+io.delta#delta-spark_4.1_2.13 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-c0f19985-30cb-41da-a327-239c28e75941;1.0
+	confs: [default]
+	found io.delta#delta-spark_4.1_2.13;4.2.0 in spark-list
+	found io.delta#delta-storage;4.2.0 in central
+	found io.unitycatalog#unitycatalog-client;0.4.1 in central
+	found org.slf4j#slf4j-api;2.0.13 in central
+	found org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 in central
+	found org.apache.logging.log4j#log4j-api;2.25.3 in central
+	found com.google.code.findbugs#jsr305;3.0.2 in central
+	found org.apache.logging.log4j#log4j-core;2.25.3 in spark-list
+	found io.delta#delta-kernel-api;4.2.0 in central
+	found org.roaringbitmap#RoaringBitmap;0.9.25 in central
+	found com.fasterxml.jackson.core#jackson-databind;2.13.5 in central
+	found com.fasterxml.jackson.core#jackson-annotations;2.13.5 in central
+	found com.fasterxml.jackson.core#jackson-core;2.13.5 in central
+	found com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 in central
+	found org.roaringbitmap#shims;0.9.25 in central
+	found io.delta#delta-kernel-defaults;4.2.0 in central
+	found org.apache.hadoop#hadoop-client-runtime;3.4.2 in central
+	found org.apache.parquet#parquet-hadoop;1.16.0 in central
+	found org.apache.parquet#parquet-column;1.16.0 in central
+	found org.apache.parquet#parquet-common;1.16.0 in central
+	found org.apache.parquet#parquet-format-structures;1.16.0 in central
+	found javax.annotation#javax.annotation-api;1.3.2 in central
+	found org.apache.parquet#parquet-encoding;1.16.0 in central
+	found org.locationtech.jts#jts-core;1.20.0 in central
+	found org.xerial.snappy#snappy-java;1.1.10.7 in central
+	found io.airlift#aircompressor;2.0.2 in central
+	found commons-pool#commons-pool;1.6 in central
+	found com.github.luben#zstd-jni;1.5.7-3 in central
+	found org.apache.hadoop#hadoop-client-api;3.4.2 in central
+	found commons-logging#commons-logging;1.3.0 in central
+	found org.apache.parquet#parquet-jackson;1.16.0 in central
+	found io.delta#delta-kernel-unitycatalog;4.2.0 in central
+:: resolution report :: resolve 2976ms :: artifacts dl 74ms
+	:: modules in use:
+	com.fasterxml.jackson.core#jackson-annotations;2.13.5 from central in [default]
+	com.fasterxml.jackson.core#jackson-core;2.13.5 from central in [default]
+	com.fasterxml.jackson.core#jackson-databind;2.13.5 from central in [default]
+	com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 from central in [default]
+	com.github.luben#zstd-jni;1.5.7-3 from central in [default]
+	com.google.code.findbugs#jsr305;3.0.2 from central in [default]
+	commons-logging#commons-logging;1.3.0 from central in [default]
+	commons-pool#commons-pool;1.6 from central in [default]
+	io.airlift#aircompressor;2.0.2 from central in [default]
+	io.delta#delta-kernel-api;4.2.0 from central in [default]
+	io.delta#delta-kernel-defaults;4.2.0 from central in [default]
+	io.delta#delta-kernel-unitycatalog;4.2.0 from central in [default]
+	io.delta#delta-spark_4.1_2.13;4.2.0 from spark-list in [default]
+	io.delta#delta-storage;4.2.0 from central in [default]
+	io.unitycatalog#unitycatalog-client;0.4.1 from central in [default]
+	javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+	org.apache.hadoop#hadoop-client-api;3.4.2 from central in [default]
+	org.apache.hadoop#hadoop-client-runtime;3.4.2 from central in [default]
+	org.apache.logging.log4j#log4j-api;2.25.3 from central in [default]
+	org.apache.logging.log4j#log4j-core;2.25.3 from spark-list in [default]
+	org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 from central in [default]
+	org.apache.parquet#parquet-column;1.16.0 from central in [default]
+	org.apache.parquet#parquet-common;1.16.0 from central in [default]
+	org.apache.parquet#parquet-encoding;1.16.0 from central in [default]
+	org.apache.parquet#parquet-format-structures;1.16.0 from central in [default]
+	org.apache.parquet#parquet-hadoop;1.16.0 from central in [default]
+	org.apache.parquet#parquet-jackson;1.16.0 from central in [default]
+	org.locationtech.jts#jts-core;1.20.0 from central in [default]
+	org.roaringbitmap#RoaringBitmap;0.9.25 from central in [default]
+	org.roaringbitmap#shims;0.9.25 from central in [default]
+	org.slf4j#slf4j-api;2.0.13 from central in [default]
+	org.xerial.snappy#snappy-java;1.1.10.7 from central in [default]
+	:: evicted modules:
+	org.slf4j#slf4j-api;2.0.17 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.slf4j#slf4j-api;1.7.36 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.slf4j#slf4j-api;1.7.33 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.xerial.snappy#snappy-java;1.1.10.4 by [org.xerial.snappy#snappy-java;1.1.10.7] in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   36  |   0   |   0   |   4   ||   32  |   0   |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-c0f19985-30cb-41da-a327-239c28e75941
+	confs: [default]
+	0 artifacts copied, 32 already retrieved (0kB/59ms)
+26/05/26 22:22:42 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+/mnt/d/Github/ets-big-data-kel-4/lakehouse/02_silver.py:271: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  print(f"[SPARK] Session initialized at {datetime.utcnow().isoformat()}Z\n")
+[Stage 0:>                                                          (0 + 0) / 1][Stage 0:>                                                          (0 + 1) / 1][Stage 2:>                                                         (0 + 1) / 50][Stage 2:=>                                                        (1 + 1) / 50][Stage 2:==>                                                       (2 + 1) / 50][Stage 2:===>                                                      (3 + 1) / 50][Stage 2:====>                                                     (4 + 1) / 50][Stage 2:=====>                                                    (5 + 1) / 50][Stage 2:======>                                                   (6 + 1) / 50][Stage 2:========>                                                 (7 + 1) / 50][Stage 2:=========>                                                (8 + 1) / 50][Stage 2:==========>                                               (9 + 1) / 50][Stage 2:===========>                                             (10 + 1) / 50][Stage 2:============>                                            (11 + 1) / 50][Stage 2:=============>                                           (12 + 1) / 50][Stage 2:==============>                                          (13 + 1) / 50][Stage 2:===============>                                         (14 + 1) / 50][Stage 2:==================>                                      (16 + 1) / 50][Stage 2:===================>                                     (17 + 1) / 50][Stage 2:====================>                                    (18 + 1) / 50][Stage 2:=====================>                                   (19 + 1) / 50][Stage 2:======================>                                  (20 + 1) / 50][Stage 2:=========================>                               (22 + 1) / 50][Stage 2:==========================>                              (23 + 1) / 50][Stage 2:===========================>                             (24 + 1) / 50][Stage 2:============================>                            (25 + 1) / 50][Stage 2:=============================>                           (26 + 1) / 50][Stage 2:==============================>                          (27 + 1) / 50][Stage 2:=================================>                       (29 + 1) / 50][Stage 2:==================================>                      (30 + 1) / 50][Stage 2:===================================>                     (31 + 1) / 50][Stage 2:====================================>                    (32 + 1) / 50][Stage 2:======================================>                  (34 + 1) / 50][Stage 2:=======================================>                 (35 + 1) / 50][Stage 2:==========================================>              (37 + 1) / 50][Stage 2:===========================================>             (38 + 1) / 50][Stage 2:=============================================>           (40 + 1) / 50][Stage 2:===============================================>         (42 + 1) / 50][Stage 2:=================================================>       (43 + 1) / 50][Stage 2:==================================================>      (44 + 1) / 50][Stage 2:===================================================>     (45 + 1) / 50][Stage 2:=====================================================>   (47 + 1) / 50][Stage 2:=======================================================> (49 + 1) / 50]                                                                                [Stage 7:==>                                                       (2 + 1) / 50][Stage 7:=====>                                                    (5 + 1) / 50][Stage 7:==========>                                               (9 + 1) / 50][Stage 7:==============>                                          (13 + 1) / 50][Stage 7:=====================>                                   (19 + 1) / 50][Stage 7:===========================>                             (24 + 1) / 50][Stage 7:==================================>                      (30 + 1) / 50][Stage 7:=========================================>               (36 + 1) / 50][Stage 7:=================================================>       (43 + 1) / 50]                                                                                [Stage 12:=====================>                                  (19 + 1) / 50][Stage 12:================================>                       (29 + 1) / 50][Stage 12:================================================>       (43 + 1) / 50]                                                                                [Stage 13:>                                                         (0 + 1) / 1]                                                                                [Stage 20:============================================>           (40 + 1) / 50]                                                                                [Stage 28:=======================================>                (35 + 1) / 50][Stage 28:===================================================>    (46 + 1) / 50]                                                                                [Stage 36:========================================>               (36 + 1) / 50]                                                                                [Stage 44:===================================================>    (46 + 1) / 50]                                                                                [Stage 47:>                                                         (0 + 1) / 1]                                                                                [Stage 50:=>                                                       (1 + 1) / 50][Stage 50:===>                                                     (3 + 1) / 50][Stage 50:======>                                                  (6 + 1) / 50][Stage 50:=========>                                               (8 + 1) / 50][Stage 50:==========>                                              (9 + 1) / 50][Stage 50:===========>                                            (10 + 1) / 50][Stage 50:============>                                           (11 + 1) / 50][Stage 50:============>                                           (11 + 2) / 50][Stage 50:=============>                                          (12 + 1) / 50][Stage 50:==============>                                         (13 + 1) / 50][Stage 50:===============>                                        (14 + 1) / 50][Stage 50:=================>                                      (16 + 1) / 50][Stage 50:===================>                                    (17 + 1) / 50][Stage 50:=====================>                                  (19 + 1) / 50][Stage 50:=======================>                                (21 + 1) / 50][Stage 50:============================>                           (25 + 1) / 50][Stage 50:================================>                       (29 + 1) / 50][Stage 50:===================================>                    (32 + 1) / 50][Stage 50:========================================>               (36 + 1) / 50][Stage 50:===========================================>            (39 + 1) / 50][Stage 50:================================================>       (43 + 1) / 50][Stage 50:====================================================>   (47 + 1) / 50]                                                                                [Stage 52:===================================>                    (32 + 1) / 50][Stage 52:==========================================>             (38 + 1) / 50][Stage 52:====================================================>   (47 + 1) / 50]                                                                                
+[SPARK] PySpark version: 4.1.1
+[SPARK] Session initialized at 2026-05-26T15:23:06.520989Z
+
+[SILVER] Starting cleaning transformations...
+[SILVER] Input: ./lakehouse_data/bronze/news
+[SILVER] Output: ./lakehouse_data/silver/news
+[SILVER] Reading Bronze data...
+[SILVER] Bronze records: 78
+
+[SILVER] Transformation 1: URL Normalization + Deduplication
+[SILVER] Strategy: normalize url then dropDuplicates(['normalized_url'])
+[SILVER] Reason: Normalize query strings/case/trailing slash to avoid near-duplicates
+[SILVER] Records removed: 0 (0.0%)
+[SILVER] Records after dedup: 78
+
+[SILVER] Transformation 2: Type Casting & Timestamp Parsing
+[SILVER] Strategy: Parse 'timestamp' and 'waktu_terbit' columns
+[SILVER] Reason: Enable temporal analysis (hourly aggregation, window functions)
+[SILVER] Timestamps parsed successfully: 78/78
+
+[SILVER] Transformation 3: Text Normalization & Null Handling
+[SILVER] Strategy: trim() + fillna()
+[SILVER] Reason: Ensure consistent string values for grouping/join operations
+[SILVER] Null values in 'sumber' field: 0
+[SILVER] Replaced with 'Unknown': 0
+
+[SILVER] Final record count: 78
+
+[SILVER] Writing to Delta Lake...
+[DONE] Silver layer created successfully at ./lakehouse_data/silver/news
+
+[SILVER] Schema:
+root
+ |-- deskripsi: string (nullable = true)
+ |-- image: string (nullable = true)
+ |-- judul: string (nullable = true)
+ |-- kategori: string (nullable = true)
+ |-- sumber: string (nullable = false)
+ |-- thumbnail: string (nullable = true)
+ |-- timestamp: string (nullable = true)
+ |-- url: string (nullable = true)
+ |-- waktu_terbit: string (nullable = true)
+ |-- _ingested_at: timestamp (nullable = true)
+ |-- _source: string (nullable = true)
+ |-- normalized_url: string (nullable = true)
+ |-- parsed_timestamp: timestamp (nullable = true)
+ |-- jam: integer (nullable = true)
+
+
+[SILVER] Sample data (first 3 records):
++-------------------------------------------------------------------------------------+------------------+----------------------------------------------------------------------------------------------------------------------------------------------+---+-------------------+--------------------------+-------+
+|judul                                                                                |sumber            |url                                                                                                                                           |jam|parsed_timestamp   |_ingested_at              |_source|
++-------------------------------------------------------------------------------------+------------------+----------------------------------------------------------------------------------------------------------------------------------------------+---+-------------------+--------------------------+-------+
+|WHO: Hantavirus di kapal pesiar diperkirakan tak picu epidemi besar                  |ANTARA News Bali  |https://bali.antaranews.com/berita/404993/who-hantavirus-di-kapal-pesiar-diperkirakan-tak-picu-epidemi-besar                                  |6  |2026-05-08 06:29:09|2026-05-26 22:21:37.880051|api    |
+|Bocoran Fitur Terbaru One UI 9 di Android 16 yang Mulai Diuji Coba Samsung Tahun 2026|Desakarangbendo.id|https://desakarangbendo.id/berita-teknologi/14014715242/bocoran-fitur-terbaru-one-ui-9-di-android-16-yang-mulai-diuji-coba-samsung-tahun-2026/|1  |2026-05-08 01:47:14|2026-05-26 22:21:37.880051|api    |
+|Daftar Program Andalan Prabowo 2027: Mobil Nasional hingga Giant Sea Wall            |detikFinance      |https://finance.detik.com/berita-ekonomi-bisnis/d-8479204/daftar-program-andalan-prabowo-2027-mobil-nasional-hingga-giant-sea-wall            |6  |2026-05-08 06:55:20|2026-05-26 22:21:37.880051|api    |
++-------------------------------------------------------------------------------------+------------------+----------------------------------------------------------------------------------------------------------------------------------------------+---+-------------------+--------------------------+-------+
+
+
+[SILVER] === DATA QUALITY REPORT ===
+Bronze Input:        78 records
+After Dedup:         78 records (-0)
+After Parse:         78 with valid timestamp
+After Normalize:     78 records
+Data Loss:           0.0%
+  - Duplicates:      0
+  - Null sumber:     0 (replaced, not dropped)
+
+[SPARK] Session stopped
+WARNING: Using incubator modules: jdk.incubator.vector
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+26/05/26 22:24:40 WARN Utils: Your hostname, Rii-PC, resolves to a loopback address: 127.0.1.1; using 10.255.255.254 instead (on interface lo)
+26/05/26 22:24:41 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+:: loading settings :: url = jar:file:/mnt/d/Github/ets-big-data-kel-4/.venv/lib/python3.13/site-packages/pyspark/jars/ivy-2.5.3.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /home/fathari/.ivy2.5.2/cache
+The jars for the packages stored in: /home/fathari/.ivy2.5.2/jars
+io.delta#delta-spark_4.1_2.13 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-c5c75942-a61d-4b13-ab9b-bfd9f2623a2b;1.0
+	confs: [default]
+	found io.delta#delta-spark_4.1_2.13;4.2.0 in spark-list
+	found io.delta#delta-storage;4.2.0 in central
+	found io.unitycatalog#unitycatalog-client;0.4.1 in central
+	found org.slf4j#slf4j-api;2.0.13 in central
+	found org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 in central
+	found org.apache.logging.log4j#log4j-api;2.25.3 in central
+	found com.google.code.findbugs#jsr305;3.0.2 in central
+	found org.apache.logging.log4j#log4j-core;2.25.3 in spark-list
+	found io.delta#delta-kernel-api;4.2.0 in central
+	found org.roaringbitmap#RoaringBitmap;0.9.25 in central
+	found com.fasterxml.jackson.core#jackson-databind;2.13.5 in central
+	found com.fasterxml.jackson.core#jackson-annotations;2.13.5 in central
+	found com.fasterxml.jackson.core#jackson-core;2.13.5 in central
+	found com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 in central
+	found org.roaringbitmap#shims;0.9.25 in central
+	found io.delta#delta-kernel-defaults;4.2.0 in central
+	found org.apache.hadoop#hadoop-client-runtime;3.4.2 in central
+	found org.apache.parquet#parquet-hadoop;1.16.0 in central
+	found org.apache.parquet#parquet-column;1.16.0 in central
+	found org.apache.parquet#parquet-common;1.16.0 in central
+	found org.apache.parquet#parquet-format-structures;1.16.0 in central
+	found javax.annotation#javax.annotation-api;1.3.2 in central
+	found org.apache.parquet#parquet-encoding;1.16.0 in central
+	found org.locationtech.jts#jts-core;1.20.0 in central
+	found org.xerial.snappy#snappy-java;1.1.10.7 in central
+	found io.airlift#aircompressor;2.0.2 in central
+	found commons-pool#commons-pool;1.6 in central
+	found com.github.luben#zstd-jni;1.5.7-3 in central
+	found org.apache.hadoop#hadoop-client-api;3.4.2 in central
+	found commons-logging#commons-logging;1.3.0 in central
+	found org.apache.parquet#parquet-jackson;1.16.0 in central
+	found io.delta#delta-kernel-unitycatalog;4.2.0 in central
+:: resolution report :: resolve 2210ms :: artifacts dl 106ms
+	:: modules in use:
+	com.fasterxml.jackson.core#jackson-annotations;2.13.5 from central in [default]
+	com.fasterxml.jackson.core#jackson-core;2.13.5 from central in [default]
+	com.fasterxml.jackson.core#jackson-databind;2.13.5 from central in [default]
+	com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 from central in [default]
+	com.github.luben#zstd-jni;1.5.7-3 from central in [default]
+	com.google.code.findbugs#jsr305;3.0.2 from central in [default]
+	commons-logging#commons-logging;1.3.0 from central in [default]
+	commons-pool#commons-pool;1.6 from central in [default]
+	io.airlift#aircompressor;2.0.2 from central in [default]
+	io.delta#delta-kernel-api;4.2.0 from central in [default]
+	io.delta#delta-kernel-defaults;4.2.0 from central in [default]
+	io.delta#delta-kernel-unitycatalog;4.2.0 from central in [default]
+	io.delta#delta-spark_4.1_2.13;4.2.0 from spark-list in [default]
+	io.delta#delta-storage;4.2.0 from central in [default]
+	io.unitycatalog#unitycatalog-client;0.4.1 from central in [default]
+	javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+	org.apache.hadoop#hadoop-client-api;3.4.2 from central in [default]
+	org.apache.hadoop#hadoop-client-runtime;3.4.2 from central in [default]
+	org.apache.logging.log4j#log4j-api;2.25.3 from central in [default]
+	org.apache.logging.log4j#log4j-core;2.25.3 from spark-list in [default]
+	org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 from central in [default]
+	org.apache.parquet#parquet-column;1.16.0 from central in [default]
+	org.apache.parquet#parquet-common;1.16.0 from central in [default]
+	org.apache.parquet#parquet-encoding;1.16.0 from central in [default]
+	org.apache.parquet#parquet-format-structures;1.16.0 from central in [default]
+	org.apache.parquet#parquet-hadoop;1.16.0 from central in [default]
+	org.apache.parquet#parquet-jackson;1.16.0 from central in [default]
+	org.locationtech.jts#jts-core;1.20.0 from central in [default]
+	org.roaringbitmap#RoaringBitmap;0.9.25 from central in [default]
+	org.roaringbitmap#shims;0.9.25 from central in [default]
+	org.slf4j#slf4j-api;2.0.13 from central in [default]
+	org.xerial.snappy#snappy-java;1.1.10.7 from central in [default]
+	:: evicted modules:
+	org.slf4j#slf4j-api;2.0.17 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.slf4j#slf4j-api;1.7.36 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.slf4j#slf4j-api;1.7.33 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.xerial.snappy#snappy-java;1.1.10.4 by [org.xerial.snappy#snappy-java;1.1.10.7] in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   36  |   0   |   0   |   4   ||   32  |   0   |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-c5c75942-a61d-4b13-ab9b-bfd9f2623a2b
+	confs: [default]
+	0 artifacts copied, 32 already retrieved (0kB/32ms)
+26/05/26 22:24:45 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+/mnt/d/Github/ets-big-data-kel-4/lakehouse/03_gold.py:577: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  print(f"[SPARK] Session initialized at {datetime.utcnow().isoformat()}Z\n")
+[Stage 0:>                                                          (0 + 1) / 1][Stage 2:>                                                         (0 + 1) / 50][Stage 2:=>                                                        (1 + 1) / 50][Stage 2:==>                                                       (2 + 1) / 50][Stage 2:===>                                                      (3 + 1) / 50][Stage 2:====>                                                     (4 + 1) / 50][Stage 2:=====>                                                    (5 + 1) / 50][Stage 2:======>                                                   (6 + 1) / 50][Stage 2:========>                                                 (7 + 1) / 50][Stage 2:=========>                                                (8 + 1) / 50][Stage 2:===========>                                             (10 + 1) / 50][Stage 2:============>                                            (11 + 1) / 50][Stage 2:==============>                                          (13 + 1) / 50][Stage 2:===============>                                         (14 + 1) / 50][Stage 2:=================>                                       (15 + 1) / 50][Stage 2:===================>                                     (17 + 1) / 50][Stage 2:======================>                                  (20 + 1) / 50][Stage 2:=========================>                               (22 + 1) / 50][Stage 2:===========================>                             (24 + 1) / 50][Stage 2:=============================>                           (26 + 1) / 50][Stage 2:===============================>                         (28 + 1) / 50][Stage 2:==================================>                      (30 + 1) / 50][Stage 2:===================================>                     (31 + 1) / 50][Stage 2:=====================================>                   (33 + 1) / 50][Stage 2:=======================================>                 (35 + 1) / 50][Stage 2:==========================================>              (37 + 1) / 50][Stage 2:============================================>            (39 + 1) / 50][Stage 2:==============================================>          (41 + 1) / 50][Stage 2:===============================================>         (42 + 1) / 50][Stage 2:=================================================>       (43 + 1) / 50][Stage 2:===================================================>     (45 + 2) / 50][Stage 2:=====================================================>   (47 + 1) / 50]                                                                                [Stage 7:========>                                                 (7 + 1) / 50][Stage 7:============>                                            (11 + 1) / 50][Stage 7:==================>                                      (16 + 1) / 50][Stage 7:======================>                                  (20 + 1) / 50][Stage 7:===========================>                             (24 + 1) / 50][Stage 7:===============================>                         (28 + 1) / 50][Stage 7:====================================>                    (32 + 1) / 50][Stage 7:=========================================>               (36 + 1) / 50][Stage 7:============================================>            (39 + 1) / 50][Stage 7:====================================================>    (46 + 1) / 50]                                                                                [Stage 12:================================>                       (29 + 1) / 50][Stage 12:=============================================>          (41 + 1) / 50]                                                                                [Stage 13:>                                                         (0 + 1) / 1]                                                                                [Stage 17:=================================>                      (30 + 1) / 50][Stage 17:===================================================>    (46 + 1) / 50]                                                                                [Stage 25:==================================>                     (31 + 1) / 50][Stage 25:=================================================>      (44 + 1) / 50]                                                                                [Stage 26:>                                                         (0 + 1) / 1]                                                                                [Stage 44:============>                                           (11 + 1) / 50][Stage 44:=================>                                      (16 + 1) / 50][Stage 44:==========================>                             (24 + 1) / 50][Stage 44:================================>                       (29 + 1) / 50][Stage 44:==========================================>             (38 + 1) / 50][Stage 44:===================================================>    (46 + 1) / 50]                                                                                [Stage 46:====================================>                   (33 + 1) / 50][Stage 46:=====================================================>  (48 + 2) / 50]                                                                                [Stage 60:>                                                         (0 + 1) / 1]                                                                                [Stage 63:=======>                                                 (7 + 1) / 50][Stage 63:============>                                           (11 + 1) / 50][Stage 63:===================>                                    (17 + 1) / 50][Stage 63:=======================>                                (21 + 1) / 50][Stage 63:=============================>                          (26 + 1) / 50][Stage 63:=================================>                      (30 + 1) / 50][Stage 63:======================================>                 (34 + 1) / 50][Stage 63:=========================================>              (37 + 1) / 50][Stage 63:============================================>           (40 + 1) / 50][Stage 63:================================================>       (43 + 1) / 50][Stage 63:====================================================>   (47 + 1) / 50]                                                                                [Stage 76:==============>                                         (13 + 1) / 50][Stage 76:================>                                       (15 + 1) / 50][Stage 76:=====================>                                  (19 + 1) / 50][Stage 76:======================>                                 (20 + 1) / 50][Stage 76:=========================>                              (23 + 1) / 50][Stage 76:===============================>                        (28 + 1) / 50][Stage 76:====================================>                   (33 + 1) / 50][Stage 76:==========================================>             (38 + 1) / 50][Stage 76:================================================>       (43 + 1) / 50][Stage 76:=====================================================>  (48 + 1) / 50]                                                                                [Stage 102:=======>                                                (7 + 1) / 50][Stage 102:============>                                          (11 + 1) / 50][Stage 102:===============>                                       (14 + 1) / 50][Stage 102:===================>                                   (18 + 1) / 50][Stage 102:========================>                              (22 + 1) / 50][Stage 102:============================>                          (26 + 1) / 50][Stage 102:=================================>                     (30 + 1) / 50][Stage 102:=====================================>                 (34 + 1) / 50][Stage 102:==========================================>            (39 + 1) / 50][Stage 102:=================================================>     (45 + 1) / 50][Stage 102:====================================================>  (48 + 1) / 50]                                                                                [Stage 104:==========================================>            (39 + 1) / 50]                                                                                [Stage 106:==============================================>        (42 + 1) / 50]                                                                                [Stage 120:==========>                                             (9 + 1) / 50][Stage 120:=============>                                         (12 + 1) / 50][Stage 120:=================>                                     (16 + 1) / 50][Stage 120:======================>                                (20 + 1) / 50][Stage 120:===========================>                           (25 + 1) / 50][Stage 120:==============================>                        (28 + 1) / 50][Stage 120:====================================>                  (33 + 1) / 50][Stage 120:=========================================>             (38 + 1) / 50][Stage 120:===============================================>       (43 + 1) / 50][Stage 120:===================================================>   (47 + 1) / 50]                                                                                [Stage 123:=====================================================> (49 + 1) / 50]                                                                                [Stage 143:=====================================================> (49 + 1) / 50]                                                                                [Stage 148:================================================>      (44 + 1) / 50]                                                                                [Stage 153:======================================>                (35 + 1) / 50]                                                                                [GOLD] Sastrawi not available, using 299 built-in stopwords
+
+[SPARK] PySpark version: 4.1.1
+[SPARK] Session initialized at 2026-05-26T15:24:59.692928Z
+
+[GOLD] Starting Gold layer transformation...
+[GOLD] Input: ./lakehouse_data/silver/news
+[GOLD] Output: ./lakehouse_data/gold
+
+[GOLD] Reading Silver data...
+[GOLD] Silver records: 78
+
+============================================================
+REPRODUCING ETS ANALYSIS
+============================================================
+[GOLD] Computing word_frequency (Reproducing ETS)...
+[GOLD] word_frequency: 15 unique words
+[GOLD] Computing news_per_source (Reproducing ETS)...
+[GOLD] news_per_source: 14 sources
+
+============================================================
+ENHANCED ANALYSIS (NEW)
+============================================================
+[GOLD] Computing word_velocity (ENHANCED - New Analysis)...
+[GOLD] word_velocity: 494 trending words detected
+[GOLD] Computing cross_source_topics (ENHANCED - New Analysis)...
+[GOLD] cross_source_topics: 20 topics in both API and RSS
+
+============================================================
+WRITING GOLD TABLES TO DELTA
+============================================================
+
+[GOLD] Writing word_frequency table...
+[DONE] word_frequency saved
+[GOLD] Writing news_per_source table...
+[DONE] news_per_source saved
+[GOLD] Writing word_velocity table...
+[DONE] word_velocity saved
+[GOLD] Writing cross_source_topics table...
+[DONE] cross_source_topics saved
+
+
+
+[TIME TRAVEL] Starting Time Travel Demonstration...
+
+[TIME TRAVEL] === Delta Table Version History ===
++-------+--------------------+---------+
+|version|           timestamp|operation|
++-------+--------------------+---------+
+|      0|2026-05-26 22:24:...|    WRITE|
++-------+--------------------+---------+
+
+
+[TIME TRAVEL] Current version (latest):
+  Records: 78
+
+[TIME TRAVEL] Version 0 (original):
+  Records: 78
+
+[TIME TRAVEL] Time Travel Demonstration Complete ✓
+
+============================================================
+SAMPLE OUTPUT FROM EACH GOLD TABLE
+============================================================
+
+[GOLD] Top 15 Trending Words:
++----------+---------+
+|      kata|frekuensi|
++----------+---------+
+|      2026|        8|
+|    dokter|        7|
+|   sekolah|        7|
+|     kapal|        5|
+|    magang|        5|
+|pemerintah|        5|
+|   prabowo|        5|
+|    rakyat|        5|
+|hantavirus|        4|
+|  kemenkes|        4|
+|    hadiri|        3|
+|    hormuz|        3|
+|      iran|        3|
+|  kematian|        3|
+|    kepala|        3|
++----------+---------+
+
+
+[GOLD] News Distribution by Source:
++------------------+------+
+|            sumber|jumlah|
++------------------+------+
+|             Tempo|    55|
+|         detikNews|     7|
+|        detiksport|     3|
+|    CNBC Indonesia|     2|
+|          Goal.com|     2|
+|       ANTARA News|     1|
+|  ANTARA News Bali|     1|
+|Desakarangbendo.id|     1|
+|  Harian Banyuasin|     1|
+|        Kompas.com|     1|
++------------------+------+
+only showing top 10 rows
+
+[GOLD] Top 10 Trending Words (by velocity):
++---------+---+------------+-------------+--------+
+|     kata|jam|freq_current|freq_previous|velocity|
++---------+---+------------+-------------+--------+
+| kemensos| 21|           2|         NULL|       2|
+|   kepala| 18|           2|         NULL|       2|
+| muktamar| 13|           2|         NULL|       2|
+|pengadaan| 13|           2|         NULL|       2|
+|   rakyat| 13|           2|         NULL|       2|
+|    batam| 12|           2|         NULL|       2|
+| strategi| 12|           2|         NULL|       2|
+|    dapur|  8|           2|         NULL|       2|
+|    lapas|  8|           2|         NULL|       2|
+|      mbg|  8|           2|         NULL|       2|
++---------+---+------------+-------------+--------+
+
+
+[GOLD] Cross-Source Topics (API + RSS):
++----------+---------+---------+-------------------+
+|     topik|api_count|rss_count|co_occurrence_ratio|
++----------+---------+---------+-------------------+
+|      2026|        1|        7| 1.1428571428571428|
+|    dokter|        1|        6| 1.1666666666666667|
+|   prabowo|        1|        4|               1.25|
+|    hadiri|        1|        2|                1.5|
+|  kematian|        1|        2|                1.5|
+|masyarakat|        2|        1|                1.5|
+|      pati|        2|        1|                1.5|
+|      picu|        2|        1|                1.5|
+|    ponpes|        2|        1|                1.5|
+|   program|        1|        2|                1.5|
++----------+---------+---------+-------------------+
+
+
+[DONE] All Gold tables created successfully!
+
+[SPARK] Session stopped
+/mnt/d/Github/ets-big-data-kel-4/lakehouse/BONUS_dashboard_integration.py:307: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  print(f"Started at: {datetime.utcnow().isoformat()}Z\n")
+WARNING: Using incubator modules: jdk.incubator.vector
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+26/05/26 22:26:58 WARN Utils: Your hostname, Rii-PC, resolves to a loopback address: 127.0.1.1; using 10.255.255.254 instead (on interface lo)
+26/05/26 22:26:58 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+:: loading settings :: url = jar:file:/mnt/d/Github/ets-big-data-kel-4/.venv/lib/python3.13/site-packages/pyspark/jars/ivy-2.5.3.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /home/fathari/.ivy2.5.2/cache
+The jars for the packages stored in: /home/fathari/.ivy2.5.2/jars
+io.delta#delta-spark_4.1_2.13 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-8fed1682-7d58-4e00-b73e-5861db1141fb;1.0
+	confs: [default]
+	found io.delta#delta-spark_4.1_2.13;4.2.0 in spark-list
+	found io.delta#delta-storage;4.2.0 in central
+	found io.unitycatalog#unitycatalog-client;0.4.1 in central
+	found org.slf4j#slf4j-api;2.0.13 in central
+	found org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 in central
+	found org.apache.logging.log4j#log4j-api;2.25.3 in central
+	found com.google.code.findbugs#jsr305;3.0.2 in central
+	found org.apache.logging.log4j#log4j-core;2.25.3 in spark-list
+	found io.delta#delta-kernel-api;4.2.0 in central
+	found org.roaringbitmap#RoaringBitmap;0.9.25 in central
+	found com.fasterxml.jackson.core#jackson-databind;2.13.5 in central
+	found com.fasterxml.jackson.core#jackson-annotations;2.13.5 in central
+	found com.fasterxml.jackson.core#jackson-core;2.13.5 in central
+	found com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 in central
+	found org.roaringbitmap#shims;0.9.25 in central
+	found io.delta#delta-kernel-defaults;4.2.0 in central
+	found org.apache.hadoop#hadoop-client-runtime;3.4.2 in central
+	found org.apache.parquet#parquet-hadoop;1.16.0 in central
+	found org.apache.parquet#parquet-column;1.16.0 in central
+	found org.apache.parquet#parquet-common;1.16.0 in central
+	found org.apache.parquet#parquet-format-structures;1.16.0 in central
+	found javax.annotation#javax.annotation-api;1.3.2 in central
+	found org.apache.parquet#parquet-encoding;1.16.0 in central
+	found org.locationtech.jts#jts-core;1.20.0 in central
+	found org.xerial.snappy#snappy-java;1.1.10.7 in central
+	found io.airlift#aircompressor;2.0.2 in central
+	found commons-pool#commons-pool;1.6 in central
+	found com.github.luben#zstd-jni;1.5.7-3 in central
+	found org.apache.hadoop#hadoop-client-api;3.4.2 in central
+	found commons-logging#commons-logging;1.3.0 in central
+	found org.apache.parquet#parquet-jackson;1.16.0 in central
+	found io.delta#delta-kernel-unitycatalog;4.2.0 in central
+:: resolution report :: resolve 1558ms :: artifacts dl 36ms
+	:: modules in use:
+	com.fasterxml.jackson.core#jackson-annotations;2.13.5 from central in [default]
+	com.fasterxml.jackson.core#jackson-core;2.13.5 from central in [default]
+	com.fasterxml.jackson.core#jackson-databind;2.13.5 from central in [default]
+	com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 from central in [default]
+	com.github.luben#zstd-jni;1.5.7-3 from central in [default]
+	com.google.code.findbugs#jsr305;3.0.2 from central in [default]
+	commons-logging#commons-logging;1.3.0 from central in [default]
+	commons-pool#commons-pool;1.6 from central in [default]
+	io.airlift#aircompressor;2.0.2 from central in [default]
+	io.delta#delta-kernel-api;4.2.0 from central in [default]
+	io.delta#delta-kernel-defaults;4.2.0 from central in [default]
+	io.delta#delta-kernel-unitycatalog;4.2.0 from central in [default]
+	io.delta#delta-spark_4.1_2.13;4.2.0 from spark-list in [default]
+	io.delta#delta-storage;4.2.0 from central in [default]
+	io.unitycatalog#unitycatalog-client;0.4.1 from central in [default]
+	javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+	org.apache.hadoop#hadoop-client-api;3.4.2 from central in [default]
+	org.apache.hadoop#hadoop-client-runtime;3.4.2 from central in [default]
+	org.apache.logging.log4j#log4j-api;2.25.3 from central in [default]
+	org.apache.logging.log4j#log4j-core;2.25.3 from spark-list in [default]
+	org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 from central in [default]
+	org.apache.parquet#parquet-column;1.16.0 from central in [default]
+	org.apache.parquet#parquet-common;1.16.0 from central in [default]
+	org.apache.parquet#parquet-encoding;1.16.0 from central in [default]
+	org.apache.parquet#parquet-format-structures;1.16.0 from central in [default]
+	org.apache.parquet#parquet-hadoop;1.16.0 from central in [default]
+	org.apache.parquet#parquet-jackson;1.16.0 from central in [default]
+	org.locationtech.jts#jts-core;1.20.0 from central in [default]
+	org.roaringbitmap#RoaringBitmap;0.9.25 from central in [default]
+	org.roaringbitmap#shims;0.9.25 from central in [default]
+	org.slf4j#slf4j-api;2.0.13 from central in [default]
+	org.xerial.snappy#snappy-java;1.1.10.7 from central in [default]
+	:: evicted modules:
+	org.slf4j#slf4j-api;2.0.17 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.slf4j#slf4j-api;1.7.36 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.slf4j#slf4j-api;1.7.33 by [org.slf4j#slf4j-api;2.0.13] in [default]
+	org.xerial.snappy#snappy-java;1.1.10.4 by [org.xerial.snappy#snappy-java;1.1.10.7] in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   36  |   0   |   0   |   4   ||   32  |   0   |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-8fed1682-7d58-4e00-b73e-5861db1141fb
+	confs: [default]
+	0 artifacts copied, 32 already retrieved (0kB/29ms)
+26/05/26 22:27:02 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+/mnt/d/Github/ets-big-data-kel-4/lakehouse/BONUS_dashboard_integration.py:111: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+26/05/26 22:27:29 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
+[Stage 0:>                                                          (0 + 1) / 1][Stage 2:>                                                         (0 + 0) / 50][Stage 2:>                                                         (0 + 8) / 50][Stage 2:>                                                        (0 + 10) / 50][Stage 2:=========>                                                (8 + 8) / 50][Stage 2:===========>                                             (10 + 9) / 50][Stage 2:===============>                                         (14 + 9) / 50][Stage 2:===================>                                     (17 + 8) / 50][Stage 2:======================>                                  (20 + 8) / 50][Stage 2:=============================>                           (26 + 8) / 50][Stage 2:===============================>                         (28 + 8) / 50][Stage 2:====================================>                    (32 + 9) / 50][Stage 2:=========================================>               (36 + 8) / 50][Stage 2:==============================================>          (41 + 8) / 50][Stage 2:====================================================>    (46 + 4) / 50]                                                                                [Stage 7:============================================>            (39 + 8) / 50]                                                                                [Stage 8:>                                                          (0 + 1) / 1]                                                                                [Stage 11:==========>                                              (9 + 8) / 50][Stage 11:===========>                                            (10 + 9) / 50][Stage 11:================>                                       (15 + 8) / 50][Stage 11:===================>                                    (17 + 8) / 50][Stage 11:========================>                               (22 + 8) / 50][Stage 11:=============================>                          (26 + 8) / 50][Stage 11:================================>                       (29 + 8) / 50][Stage 11:===================================>                    (32 + 8) / 50][Stage 11:======================================>                 (34 + 8) / 50][Stage 11:============================================>           (40 + 8) / 50][Stage 11:=============================================>          (41 + 7) / 50][Stage 11:=================================================>      (44 + 6) / 50][Stage 11:=====================================================>  (48 + 2) / 50]                                                                                [Stage 16:====================================>                   (33 + 8) / 50]                                                                                [Stage 20:>                                                        (0 + 8) / 50][Stage 20:=========>                                               (8 + 8) / 50][Stage 20:=============>                                          (12 + 8) / 50][Stage 20:======================>                                 (20 + 9) / 50][Stage 20:=========================>                              (23 + 8) / 50][Stage 20:==================================>                     (31 + 8) / 50][Stage 20:=======================================>                (35 + 8) / 50][Stage 20:=============================================>          (41 + 8) / 50]                                                                                [Stage 21:>                                                         (0 + 1) / 1]                                                                                [Stage 33:=====================================================>  (48 + 2) / 50]                                                                                [Stage 37:===========>                                            (10 + 8) / 50][Stage 37:================>                                       (15 + 8) / 50][Stage 37:=================>                                      (16 + 8) / 50][Stage 37:========================>                               (22 + 8) / 50][Stage 37:==========================>                             (24 + 8) / 50][Stage 37:==================================>                     (31 + 8) / 50][Stage 37:============================================>           (40 + 8) / 50]                                                                                [Stage 39:====================>                                   (18 + 8) / 50][Stage 39:=============================>                          (26 + 8) / 50][Stage 39:==================================>                     (31 + 9) / 50][Stage 39:========================================>               (36 + 9) / 50]                                                                                
+======================================================================
+BONUS DEMO: Dashboard Flask Integration with Delta Lake
+======================================================================
+Started at: 2026-05-26T15:26:41.300666Z
+
+[DASHBOARD] Generating payload from Gold Delta Layer...
+[DASHBOARD] Reading word_frequency...
+  ✓ Loaded 15 trending words
+[DASHBOARD] Reading news_per_source...
+  ✓ Loaded 14 news sources
+[DASHBOARD] Reading silver/news for volume_per_jam...
+  ✓ Loaded hourly volume from Silver
+[DASHBOARD] Refreshed live snapshots: 23 API, 55 RSS
+[DASHBOARD] Reading cross_source_topics (ENHANCED)...
+  ✓ Loaded 20 cross-source topics
+
+[DASHBOARD] Payload saved to: ./dashboard_data_from_delta.json
+
+[DASHBOARD] Sample payload (first 3 words):
+{
+  "kata_trending": [
+    {
+      "kata": "2026",
+      "frekuensi": 8
+    },
+    {
+      "kata": "dokter",
+      "frekuensi": 7
+    },
+    {
+      "kata": "sekolah",
+      "frekuensi": 7
+    }
+  ],
+  "distribusi_sumber": [
+    {
+      "sumber": "Tempo",
+      "jumlah": 55
+    },
+    {
+      "sumber": "detikNews",
+      "jumlah": 7
+    },
+    {
+      "sumber": "detiksport",
+      "jumlah": 3
+    }
+  ],
+  "metadata": {
+    "total_sources": 14,
+    "total_api": 23,
+    "total_rss": 55,
+    "total_trending_words": 15,
+    "total_cross_topics": 20,
+    "pipeline": "Delta Lake Lakehouse (Bronze → Silver → Gold)",
+    "data_quality": {
+      "deduplication": "Applied (url-based)",
+      "timestamp_parsing": "100%",
+      "null_handling": "Applied (sumber='Unknown')"
+    }
+  }
+}
+
+======================================================================
+CODE SNIPPET FOR INTEGRATING DELTA LAKE WITH FLASK:
+======================================================================
+
+# ===== ADD THIS TO dashboard/app.py =====
+
+from pyspark.sql import SparkSession
+from delta import configure_spark_with_delta_pip
+import json
+import os
+
+def get_dashboard_data_from_delta():
+    """
+    Read dashboard data from Gold Delta Layer instead of spark_results.json
+    
+    This integrates the Lakehouse architecture with the Flask dashboard.
+    """
+    try:
+        # Initialize Spark with Delta support
+        builder = SparkSession.builder.appName("DashboardReader")
+        spark = configure_spark_with_delta_pip(builder).getOrCreate()
+        
+        gold_path = "../lakehouse/lakehouse_data/gold"
+        
+        # Read tables
+        word_freq = spark.read.format("delta").load(os.path.join(gold_path, "word_frequency"))
+        news_source = spark.read.format("delta").load(os.path.join(gold_path, "news_per_source"))
+        cross_src = spark.read.format("delta").load(os.path.join(gold_path, "cross_source_topics"))
+        
+        # Convert to JSON-serializable format
+        dashboard_data = {
+            "kata_trending": [
+                {"kata": row.kata, "frekuensi": int(row.frekuensi)}
+                for row in word_freq.collect()
+            ],
+            "distribusi_sumber": [
+                {"sumber": row.sumber, "jumlah": int(row.jumlah)}
+                for row in news_source.collect()
+            ],
+            "cross_source_topics": [
+                {
+                    "topik": row.topik,
+                    "api_count": int(row.api_count),
+                    "rss_count": int(row.rss_count)
+                }
+                for row in cross_src.limit(20).collect()
+            ],
+            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "source": "Delta Lake Gold Layer"
+        }
+        
+        spark.stop()
+        return dashboard_data
+        
+    except Exception as e:
+        print(f"[ERROR] Could not read from Delta: {e}")
+        # Fallback ke JSON static
+        return load_json_fallback()
+
+# Update route untuk menggunakan Delta Lake
+@app.route("/api/dashboard", methods=["GET"])
+def api_dashboard():
+    """API endpoint yang membaca dari Delta Lake real-time"""
+    data = get_dashboard_data_from_delta()
+    return jsonify(data)
+
+# ===== END CODE SNIPPET =====
+
+
+======================================================================
+BONUS INTEGRATION BENEFITS:
+======================================================================
+✓ Dashboard reads real-time data from Delta Gold tables
+✓ No more waiting for spark_analysis.py to finish
+✓ Can query specific time versions using versionAsOf
+✓ Schema-safe: New columns auto-populate in dashboard
+✓ Full audit trail: What data was displayed when?
+
+⭐ BONUS: +5 POINTS FOR DASHBOARD DELTA INTEGRATION ⭐
+
+/mnt/d/Github/ets-big-data-kel-4/scripts/run_lakehouse_continuous.py:51: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+/mnt/d/Github/ets-big-data-kel-4/scripts/run_lakehouse_continuous.py:72: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "last_run": datetime.utcnow().isoformat() + "Z",

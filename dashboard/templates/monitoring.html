@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NewsPulse - Monitoring workflow Kafka, HDFS, datalake, dan dashboard">
+    <title>NewsPulse - Workflow Monitoring</title>
+    <script>
+        (() => {
+            const storedTheme = localStorage.getItem('newspulse-theme');
+            const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.dataset.theme = storedTheme || preferredTheme;
+        })();
+    </script>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header finisher-header" id="main-header">
+        <div class="header-content">
+            <a class="logo-section" href="/" aria-label="Kembali ke dashboard utama">
+                <span class="logo-shell">
+                    <img src="/static/logo-news-pulse.png" alt="NewsPulse" class="logo-image">
+                </span>
+                <span class="brand-live"><span class="brand-dot"></span>Workflow Monitoring</span>
+            </a>
+            <h1 class="sr-only">NewsPulse - Workflow Monitoring</h1>
+            <nav class="header-nav">
+                <a href="/">Dashboard</a>
+                <a href="/monitoring" class="active">Monitoring</a>
+            </nav>
+            <div class="header-right">
+                <div class="header-stats">
+                    <div class="stat-badge"><span class="stat-dot api"></span><span>Status: <strong id="monitoring-status">Loading</strong></span></div>
+                </div>
+                <div class="header-time" id="monitoring-clock">--:--:--</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard monitoring-dashboard">
+        <section class="monitoring-hero card">
+            <div class="card-header">
+                <div>
+                    <h2>Workflow Overview</h2>
+                    <p class="monitoring-subtitle">Kafka → HDFS → Datalake/Lakehouse → Dashboard</p>
+                </div>
+                <div class="monitoring-meta">
+                    <span class="badge live">LIVE</span>
+                    <span class="monitoring-updated" id="monitoring-updated">Belum diperbarui</span>
+                </div>
+            </div>
+            <div class="card-body monitoring-summary-grid" id="summary-grid">
+                <div class="monitoring-summary-card">
+                    <div class="monitoring-summary-label">Last execution</div>
+                    <div class="monitoring-summary-value" id="last-execution">-</div>
+                    <div class="monitoring-summary-hint" id="last-execution-hint">Menunggu data</div>
+                </div>
+                <div class="monitoring-summary-card">
+                    <div class="monitoring-summary-label">Last success</div>
+                    <div class="monitoring-summary-value" id="last-success">-</div>
+                    <div class="monitoring-summary-hint" id="last-success-hint">-</div>
+                </div>
+                <div class="monitoring-summary-card">
+                    <div class="monitoring-summary-label">Current phase</div>
+                    <div class="monitoring-summary-value" id="current-phase">-</div>
+                    <div class="monitoring-summary-hint" id="current-phase-hint">-</div>
+                </div>
+                <div class="monitoring-summary-card">
+                    <div class="monitoring-summary-label">Freshness</div>
+                    <div class="monitoring-summary-value" id="freshness-score">-</div>
+                    <div class="monitoring-summary-hint" id="freshness-hint">-</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="charts-row monitoring-grid">
+            <div class="card monitoring-card">
+                <div class="card-header">
+                    <h2>Process Health</h2>
+                    <span class="badge">PID + log tail</span>
+                </div>
+                <div class="card-body">
+                    <div id="process-list" class="process-list">
+                        <div class="loading">Memuat status proses...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card monitoring-card">
+                <div class="card-header">
+                    <h2>Data Freshness</h2>
+                    <span class="badge">mtime</span>
+                </div>
+                <div class="card-body">
+                    <div id="freshness-list" class="freshness-list">
+                        <div class="loading">Memuat freshness data...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card card-full monitoring-card">
+            <div class="card-header">
+                <h2>Recent Logs</h2>
+                <span class="badge">tail - 12 lines</span>
+            </div>
+            <div class="card-body">
+                <div id="log-panel" class="log-panel">
+                    <div class="loading">Memuat log terbaru...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>NewsPulse -- Workflow monitoring</p>
+    </footer>
+
+    <script src="/static/finisher-header.es5.min.js"></script>
+    <script>
+        let headerAnimation=null;
+        const HEADER_THEMES={
+            light:{background:'#f8fbff',backgroundAlt:'#ffffff',backgroundEnd:'#ecfdf5',particles:['#2563eb','#0d9488','#60a5fa','#1e40af','#ea580c'],blending:'source-over'},
+            dark:{background:'#0f172a',backgroundAlt:'#111827',backgroundEnd:'#082f49',particles:['#38bdf8','#2dd4bf','#60a5fa','#f97316','#93c5fd'],blending:'screen'}
+        };
+
+        function cssVar(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim();}
+        function currentTheme(){return document.documentElement.dataset.theme==='dark'?'dark':'light';}
+        function initHeaderAnimation(){
+            if(!window.FinisherHeader){return;}
+            if(headerAnimation){headerAnimation.destroy();}
+            const theme=HEADER_THEMES[currentTheme()];
+            headerAnimation=new FinisherHeader({
+                target:'#main-header',
+                count:12,
+                size:{min:4,max:24,pulse:0.2},
+                speed:{x:{min:0.15,max:1.2},y:{min:0.02,max:0.18}},
+                colors:theme,
+                blending:theme.blending,
+                opacity:{center:0.9,edge:0.45},
+                skew:-1,
+                shapes:['s']
+            });
+        }
+
+        function formatTime(value){
+            if(!value){return '-';}
+            try{
+                return new Date(value).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'medium'});
+            }catch(e){return value;}
+        }
+
+        function formatAge(seconds){
+            if(seconds == null){return '-';}
+            if(seconds < 60){return `${seconds}s lalu`;}
+            const minutes=Math.floor(seconds/60);
+            if(minutes < 60){return `${minutes}m lalu`;}
+            const hours=Math.floor(minutes/60);
+            return `${hours}j ${minutes%60}m lalu`;
+        }
+
+        function freshnessTone(ageSeconds){
+            if(ageSeconds == null){return 'stale';}
+            if(ageSeconds < 180){return 'good';}
+            if(ageSeconds < 420){return 'warn';}
+            return 'bad';
+        }
+
+        function escapeHtml(value){
+            return String(value ?? '').replace(/[&<>"']/g, match => ({
+                '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+            }[match]));
+        }
+
+        function renderSummary(data){
+            const pipeline=data.pipeline || {};
+            document.getElementById('monitoring-status').textContent = pipeline.last_success ? 'Healthy' : 'Attention';
+            document.getElementById('last-execution').textContent = formatTime(pipeline.last_run);
+            document.getElementById('last-execution-hint').textContent = pipeline.last_run ? `Source: ${pipeline.source || '-'}` : 'Belum ada eksekusi';
+            document.getElementById('last-success').textContent = String(Boolean(pipeline.last_success));
+            document.getElementById('last-success-hint').textContent = pipeline.last_success ? 'Run terakhir sukses' : 'Run terakhir belum sukses';
+            document.getElementById('current-phase').textContent = pipeline.phase || '-';
+            document.getElementById('current-phase-hint').textContent = pipeline.source || '-';
+
+            const freshnessValues = Object.values(data.freshness || {});
+            const validFreshness = freshnessValues.filter(item => item && item.exists && typeof item.age_seconds === 'number');
+            const freshest = validFreshness.length ? Math.min(...validFreshness.map(item => item.age_seconds)) : null;
+            document.getElementById('freshness-score').textContent = freshest == null ? '-' : formatAge(freshest);
+            document.getElementById('freshness-hint').textContent = validFreshness.length ? `${validFreshness.length} file terdeteksi` : 'Belum ada file monitor';
+            document.getElementById('monitoring-updated').textContent = `Updated ${formatTime(data.generated_at)}`;
+
+            const statusTone = pipeline.last_success ? 'good' : 'warn';
+            document.getElementById('monitoring-status').parentElement.classList.toggle('status-good', statusTone === 'good');
+            document.getElementById('monitoring-status').parentElement.classList.toggle('status-warn', statusTone === 'warn');
+        }
+
+        function renderProcesses(processes){
+            const container=document.getElementById('process-list');
+            if(!processes || !processes.length){
+                container.innerHTML='<div class="empty">Belum ada process snapshot.</div>';
+                return;
+            }
+            container.innerHTML = processes.map(proc => {
+                const statusClass = proc.alive ? 'good' : (proc.pid ? 'bad' : 'stale');
+                const lines = (proc.log_tail || []).map(line => `<div class="log-line">${escapeHtml(line.trim())}</div>`).join('') || '<div class="log-line muted">Tidak ada log tail.</div>';
+                return `
+                    <article class="process-card ${statusClass}">
+                        <div class="process-card-head">
+                            <div>
+                                <div class="process-label">${escapeHtml(proc.label)}</div>
+                                <div class="process-meta">PID: ${proc.pid ?? '-'} | ${escapeHtml(proc.status)}</div>
+                            </div>
+                            <span class="health-pill ${statusClass}">${proc.alive ? 'RUNNING' : (proc.pid ? 'DEAD' : 'MISSING')}</span>
+                        </div>
+                        <div class="process-log-preview">${lines}</div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderFreshness(freshness){
+            const container=document.getElementById('freshness-list');
+            const entries = Object.entries(freshness || {});
+            if(!entries.length){
+                container.innerHTML='<div class="empty">Belum ada freshness data.</div>';
+                return;
+            }
+            container.innerHTML = entries.map(([key, item]) => {
+                const tone = freshnessTone(item ? item.age_seconds : null);
+                return `
+                    <div class="freshness-item ${tone}">
+                        <div>
+                            <div class="freshness-label">${escapeHtml(key)}</div>
+                            <div class="freshness-value">${item && item.exists ? formatTime(item.modified_at) : 'missing'}</div>
+                        </div>
+                        <div class="freshness-age">${item && item.exists ? formatAge(item.age_seconds) : 'n/a'}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderLogPanel(processes){
+            const container=document.getElementById('log-panel');
+            if(!processes || !processes.length){
+                container.innerHTML='<div class="empty">Belum ada log yang tersedia.</div>';
+                return;
+            }
+            container.innerHTML = processes.map(proc => {
+                const tail = (proc.log_tail || []).map(line => `<div class="log-line">${escapeHtml(line.trim())}</div>`).join('') || '<div class="log-line muted">Tidak ada log tail.</div>';
+                return `
+                    <section class="log-block">
+                        <div class="log-block-head">
+                            <strong>${escapeHtml(proc.label)}</strong>
+                            <span>${escapeHtml(proc.log_file)}${proc.log_info && proc.log_info.modified_at ? ` • ${formatAge(proc.log_info.age_seconds)}` : ''}</span>
+                        </div>
+                        <div class="log-lines">${tail}</div>
+                    </section>
+                `;
+            }).join('');
+        }
+
+        async function fetchMonitoring(){
+            try{
+                const response = await fetch('/api/monitoring', {cache:'no-store'});
+                const data = await response.json();
+                renderSummary(data);
+                renderProcesses(data.processes || []);
+                renderFreshness(data.freshness || {});
+                renderLogPanel(data.processes || []);
+            }catch(error){
+                document.getElementById('monitoring-status').textContent = 'Offline';
+                document.getElementById('monitoring-updated').textContent = 'Gagal memuat status';
+                document.getElementById('process-list').innerHTML = '<div class="empty">Tidak dapat mengambil status monitoring.</div>';
+                document.getElementById('freshness-list').innerHTML = '<div class="empty">Tidak dapat mengambil freshness data.</div>';
+                document.getElementById('log-panel').innerHTML = '<div class="empty">Tidak dapat mengambil log tail.</div>';
+                console.error('Monitoring fetch error:', error);
+            }
+        }
+
+        document.getElementById('monitoring-clock').textContent = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+        setInterval(()=>{document.getElementById('monitoring-clock').textContent = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}, 1000);
+        initHeaderAnimation();
+        fetchMonitoring();
+        setInterval(fetchMonitoring, 10000);
+    </script>
+</body>
+</html>

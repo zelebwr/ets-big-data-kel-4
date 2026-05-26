@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+import shutil
 from datetime import datetime
 
 from pyspark.sql import SparkSession
@@ -28,6 +29,7 @@ from pyspark.sql.functions import (
     trim,
     when,
 )
+from pyspark.sql.functions import regexp_replace, lower
 from pyspark.sql.types import StringType
 
 try:
@@ -130,12 +132,19 @@ def clean_silver(
     bronze_count = bronze.count()
     print(f"[SILVER] Bronze records: {bronze_count}")
     
-    # TRANSFORMATION 1: DEDUPLICATE
-    print("\n[SILVER] Transformation 1: Deduplication")
-    print("[SILVER] Strategy: dropDuplicates(['url'])")
-    print("[SILVER] Reason: URL is unique identifier for news article")
-    
-    dedup = bronze.dropDuplicates(["url"])
+    # TRANSFORMATION 1: URL NORMALIZATION + DEDUPLICATE
+    print("\n[SILVER] Transformation 1: URL Normalization + Deduplication")
+    print("[SILVER] Strategy: normalize url then dropDuplicates(['normalized_url'])")
+    print("[SILVER] Reason: Normalize query strings/case/trailing slash to avoid near-duplicates")
+
+    # Create a normalized URL column for robust deduplication
+    bronze = bronze.withColumn("url", trim(col("url")))
+    bronze = bronze.withColumn(
+        "normalized_url",
+        regexp_replace(regexp_replace(lower(col("url")), r"\?.*$", ""), r"/+$", "")
+    )
+
+    dedup = bronze.dropDuplicates(["normalized_url"])
     dedup_count = dedup.count()
     duplicates_removed = bronze_count - dedup_count
     
@@ -190,6 +199,8 @@ def clean_silver(
     # Write to Delta Lake (Silver layer)
     print("\n[SILVER] Writing to Delta Lake...")
     try:
+        if os.path.exists(output_path):
+            shutil.rmtree(output_path)
         normalized.write \
             .format("delta") \
             .mode("overwrite") \

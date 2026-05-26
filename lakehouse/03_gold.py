@@ -52,20 +52,89 @@ DEFAULT_SILVER_PATH = os.path.join(ROOT_DIR, "lakehouse_data", "silver", "news")
 DEFAULT_GOLD_OUTPUT = os.path.join(ROOT_DIR, "lakehouse_data", "gold")
 DEFAULT_SPARK_MASTER = os.getenv("NEWS_SPARK_MASTER", "local[1]")
 
-# Stopwords (Indonesian + English, same as ETS)
-STOPWORDS = {
+# Try to import Sastrawi for additional stopwords
+try:
+    from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
+    HAS_SASTRAWI = True
+except ImportError:
+    HAS_SASTRAWI = False
+
+# Base stopwords (Indonesian + English)
+BASE_STOPWORDS = {
+    # Indonesian stopwords - kata sambung dasar
     "dan", "yang", "untuk", "dari", "pada", "dengan", "ke", "di", "atau",
     "akan", "jadi", "para", "ini", "itu", "ada", "tak", "tidak", "bukan",
     "agar", "karena", "sebab", "saat", "hingga", "dalam", "oleh", "sebagai",
     "juga", "masih", "saja", "lebih", "sudah", "belum", "pun", "lah", "nya",
     "per", "bagi", "tanpa", "atas", "bawah", "antara", "selain",
+    # Indonesian stopwords - kata sambung/keterangan tambahan
+    "besar", "kecil", "banyak", "sedikit", "baru", "lama", "tahun", "orang",
+    "hari", "waktu", "tempat", "hal", "cara", "bisa", "dapat", "harus",
+    "ialah", "yaitu", "yakni", "adalah", "merupakan", "tersebut", "demikian",
+    "begitu", "apa", "bagaimana", "berapa", "dimana", "kapan", "siapa",
+    "kenapa", "mengapa", "kalau", "jika", "bila", "andai", "apabila",
+    "ketika", "sebelum", "sesudah", "setelah", "selama", "sementara",
+    "hanya", "sangat", "terlalu", "paling", "lagi", "namun", "tetapi",
+    "melainkan", "kecuali", "bahkan", "malah", "justru", "cuma", "tadi",
+    "nanti", "kemudian", "lalu", "maka", "akibat", "hasil", "tujuan",
+    "guna", "serta", "maupun", "hingga", "bahwa", "karena", "maka",
+    "biar", "supaya", "agar", "sehingga", "sebab", "oleh", "tentang",
+    "kepada", "terhadap", "mengenai", "menurut", "seperti", "ibarat",
+    "bak", "laksana", "bagai", "ibarat", "daripada", "alihalih",
+    "melainkan", "hanyalah", "adalah", "ialah", "yakni", "yaitu",
+    # Numbers and common words yang sering muncul
+    "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan",
+    "sembilan", "sepuluh", "pertama", "kedua", "ketiga", "tersebut",
+    # Indonesian common words
+    "ia", "dia", "mereka", "kami", "kita", "kamu", "anda", "saya", "aku",
+    "kita", "diri", "sendiri", "sini", "situ", "sana", "mana", "sana",
+    "situ", "kini", "nanti", "dulu", "dahulu", "tadi", "barusan",
+    "sesuatu", "seseorang", "beberapa", "berbagai", "macam", "jenis",
+    "buah", "ekor", "orang", "lembar", "helai", "batang", "pucuk",
+    # Common verbs/adjectives
+    "buat", "lakukan", "ambil", "beri", "tahu", "lihat", "dengar",
+    "bilang", "kata", "ucap", "tanya", "jawab", "pikir", "rasa",
+    "ingin", "mau", "perlu", "harus", "dapat", "bisa", "boleh",
+    "baik", "buruk", "benar", "salah", "tinggi", "rendah", "panjang",
+    "pendek", "lebar", "sempit", "tebal", "tipis", "berat", "ringan",
+    # English stopwords
     "the", "of", "in", "to", "a", "is", "was", "be", "been", "being",
     "have", "has", "had", "do", "does", "did", "will", "would", "could",
     "should", "may", "might", "must", "can", "are", "am", "as", "at",
     "by", "for", "it", "on", "or", "this", "that", "these", "those",
     "i", "you", "he", "she", "we", "they", "what", "which", "who", "where",
     "when", "why", "how", "all", "each", "every", "both", "any", "some",
+    "an", "and", "but", "if", "not", "no", "yes", "so", "than", "too",
+    "very", "just", "only", "also", "now", "here", "there", "then", "up",
+    "out", "about", "into", "over", "after", "before", "between", "under",
+    "again", "further", "once", "here", "there", "when", "where", "why",
+    "how", "all", "any", "both", "each", "few", "more", "most", "other",
+    "some", "such", "no", "nor", "not", "only", "own", "same", "than",
+    "too", "very", "s", "t", "can", "will", "just", "don", "should", "now",
 }
+
+
+def get_stopwords():
+    """Get combined stopwords from base list and Sastrawi (if available)."""
+    stopwords = set(BASE_STOPWORDS)
+    
+    if HAS_SASTRAWI:
+        try:
+            factory = StopWordRemoverFactory()
+            sastrawi_stopwords = set(factory.get_stop_words())
+            stopwords.update(sastrawi_stopwords)
+            print(f"[GOLD] Combined {len(BASE_STOPWORDS)} base + {len(sastrawi_stopwords)} Sastrawi stopwords = {len(stopwords)} total")
+        except Exception as e:
+            print(f"[GOLD] Could not load Sastrawi stopwords: {e}")
+            print(f"[GOLD] Using {len(stopwords)} base stopwords only")
+    else:
+        print(f"[GOLD] Sastrawi not available, using {len(stopwords)} built-in stopwords")
+    
+    return stopwords
+
+
+# Final stopwords set
+STOPWORDS = get_stopwords()
 
 
 def build_spark_session() -> SparkSession:
@@ -359,6 +428,12 @@ def write_gold_tables(
     print("[GOLD] Starting Gold layer transformation...")
     print(f"[GOLD] Input: {silver_path}")
     print(f"[GOLD] Output: {output_path}")
+    
+    # Clean Gold output directory to avoid schema conflicts
+    import shutil
+    if os.path.exists(output_path):
+        print(f"[GOLD] Cleaning existing Gold output directory: {output_path}")
+        shutil.rmtree(output_path)
     
     # Ensure output directory exists
     os.makedirs(output_path, exist_ok=True)

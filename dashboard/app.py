@@ -6,6 +6,7 @@
 
 import json
 import os
+
 from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
@@ -71,6 +72,12 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/monitoring")
+def monitoring():
+    """Render halaman monitoring workflow."""
+    return render_template("monitoring.html")
+
+
 @app.route("/api/data")
 def api_data():
     """Return JSON hasil olahan Spark untuk dashboard."""
@@ -89,7 +96,7 @@ def api_data():
     live_rss = load_json("live_rss.json", [])
     total_api = spark_results.get("total_api", len(live_api))
     total_rss = spark_results.get("total_rss", len(live_rss))
-    
+
     return jsonify({
         "spark": spark_results,
         "live_news": live_api + live_rss,

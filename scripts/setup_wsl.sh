@@ -44,8 +44,47 @@ echo "[STEP] Menjalankan Kafka dan Hadoop"
 docker compose -f docker-compose-kafka.yml up -d
 docker compose -f docker-compose-hadoop.yml up -d
 
-echo "[STEP] Menunggu service siap"
-sleep 12
+wait_for_kafka() {
+  local attempts=30
+  local delay=2
+
+  echo "[STEP] Menunggu Kafka broker siap"
+  for ((i=1; i<=attempts; i++)); do
+    if docker exec kafka-broker kafka-topics --bootstrap-server localhost:9092 --list >/dev/null 2>&1; then
+      echo "[OK] Kafka broker siap"
+      return 0
+    fi
+
+    echo "  [WAIT] Kafka belum siap, mencoba lagi (${i}/${attempts})..."
+    sleep "$delay"
+  done
+
+  echo "[ERROR] Kafka broker tidak siap setelah menunggu. Cek 'docker logs kafka-broker'."
+  exit 1
+}
+
+wait_for_kafka
+
+wait_for_hadoop_namenode() {
+  local attempts=30
+  local delay=2
+
+  echo "[STEP] Menunggu Hadoop namenode siap"
+  for ((i=1; i<=attempts; i++)); do
+    if docker exec hadoop-namenode hdfs dfs -ls / >/dev/null 2>&1; then
+      echo "[OK] Hadoop namenode siap"
+      return 0
+    fi
+
+    echo "  [WAIT] Hadoop belum siap, mencoba lagi (${i}/${attempts})..."
+    sleep "$delay"
+  done
+
+  echo "[ERROR] Hadoop namenode tidak siap setelah menunggu. Cek 'docker logs hadoop-namenode'."
+  exit 1
+}
+
+wait_for_hadoop_namenode
 
 echo "[STEP] Membuat topic Kafka (idempotent)"
 docker exec kafka-broker kafka-topics --create --if-not-exists --topic news-api --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1

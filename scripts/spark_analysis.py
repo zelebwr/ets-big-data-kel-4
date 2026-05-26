@@ -119,7 +119,7 @@ def build_spark_session() -> SparkSession:
 
 def read_hdfs_json(spark: SparkSession, path: str):
     try:
-        return spark.read.schema(NEWS_SCHEMA).option("multiLine", "true").json(path)
+        return spark.read.option("multiLine", "true").json(path)
     except Exception:
         return spark.createDataFrame([], NEWS_SCHEMA)
 

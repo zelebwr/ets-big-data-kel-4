@@ -40,6 +40,7 @@
                 <a href="#panel-map" class="active">Peta</a>
                 <a href="#panel-kata-trending">Analisis</a>
                 <a href="#panel-feed-berita">Berita</a>
+                <a href="/monitoring">Monitoring</a>
             </nav>
             <div class="header-right">
                 <div class="header-stats">
@@ -298,7 +299,7 @@
         function renderAll(data){
             latestData=data;
             applyChartDefaults();
-            const spark=data.spark||{},totalApi=data.total_api||0,totalRss=data.total_rss||0;
+            const spark=data.spark||{},totalApi=Number(data.total_api)||0,totalRss=Number(data.total_rss)||0;
             document.getElementById('count-api').textContent=totalApi;
             document.getElementById('count-rss').textContent=totalRss;
             animateNumber('total-berita',totalApi+totalRss);

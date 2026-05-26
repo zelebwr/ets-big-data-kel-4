@@ -53,6 +53,8 @@ def build_spark_session(use_local: bool = False, hdfs_base: str = DEFAULT_HDFS_B
 
     In local mode we avoid forcing an HDFS defaultFS so file paths are resolved
     to the local filesystem instead of hdfs://localhost:8020.
+    
+    When reading from HDFS, we don't set defaultFS to allow local output paths.
     """
     try:
         builder = SparkSession.builder.appName("Bronze-NewsPulse") \
@@ -63,8 +65,11 @@ def build_spark_session(use_local: bool = False, hdfs_base: str = DEFAULT_HDFS_B
             .config("spark.sql.legacy.timeParserPolicy", "LEGACY") \
             .config("spark.sql.ansi.enabled", "false")
 
+        # Don't set HDFS as defaultFS - we want output to be local
+        # HDFS paths will be accessed directly with full hdfs:// URL
         if not use_local:
-            builder = builder.config("spark.hadoop.fs.defaultFS", hdfs_base.split("/data/news")[0])
+            print(f"[BRONZE] Will read from HDFS at: {hdfs_base}")
+            print(f"[BRONZE] Output will be written to local filesystem")
         
         spark = configure_spark_with_delta_pip(builder).getOrCreate()
         
@@ -78,18 +83,27 @@ def read_hdfs_json(spark: SparkSession, path: str, use_local: bool = False) -> a
     """
     Read JSON from HDFS with fallback to empty dataframe.
     If use_local=True, attempt to read from local filesystem instead.
+    Automatically reads all JSON files in the directory.
     """
     try:
         if use_local:
             # Try reading from local path
             if os.path.exists(path):
-                return spark.read.option("multiLine", "true").json(path)
+                print(f"[BRONZE] Reading from local path: {path}")
+                df = spark.read.option("multiLine", "true").json(path)
+                record_count = df.count()
+                print(f"[BRONZE] Found {record_count} records in {path}")
+                return df
             else:
                 print(f"WARNING: Local path {path} not found, returning empty dataframe")
                 return spark.createDataFrame([], NEWS_SCHEMA)
         else:
-            # Try HDFS
-            return spark.read.option("multiLine", "true").json(path)
+            # Read from HDFS - automatically reads all JSON files in the directory
+            print(f"[BRONZE] Reading from HDFS path: {path}")
+            df = spark.read.option("multiLine", "true").json(path)
+            record_count = df.count()
+            print(f"[BRONZE] Found {record_count} records in {path}")
+            return df
     except Exception as e:
         print(f"WARNING: Could not read {path}: {e}")
         print("         Returning empty dataframe for this source")
